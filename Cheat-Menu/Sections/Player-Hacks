@@ -1,0 +1,112 @@
+// Set Level button functionality
+document.getElementById('setLevelButton').onclick = function() {
+    let player = Boot.prototype.game._state._current.user.source;
+    
+    Swal.fire({
+        title: 'Change Player Level',
+        text: 'Enter the new level (max 100):',
+        input: 'number',
+        inputAttributes: {
+            autocapitalize: 'off',
+            min: 1,
+            max: 100
+        },
+        showCancelButton: true,
+        confirmButtonText: 'Change',
+        showLoaderOnConfirm: true,
+        preConfirm: (newLevel) => {
+            return new Promise((resolve, reject) => {
+                if (!newLevel || isNaN(newLevel) || newLevel < 1 || newLevel > 100) {
+                    Swal.showValidationMessage('Please enter a valid level number between 1 and 100');
+                    reject('Invalid level input');
+                } else {
+                    resolve(parseInt(newLevel));
+                }
+            });
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            const newLevel = result.value;
+            changeLevel(newLevel, player);
+            showSuccessMessage(`Player level changed to ${newLevel}`);
+            console.log(player.data);  // Output the updated player data
+        }
+    });
+};
+
+// Permanent Morph button functionality
+document.getElementById('permanentMorphButton').onclick = function() {
+    let player = Boot.prototype.game._state._current.user.source;
+    
+    if (!player.isPlayerTransformed()) {
+        Swal.fire({
+            title: "Error",
+            text: "You are not morphed. Use a morph marble and try again.",
+            icon: "error",
+            button: "OK"
+        });
+        return;
+    }
+    
+    player.data.playerTransformation.maxTime = Infinity;
+    player.data.playerTransformation.timeRemaining = Infinity;
+    
+    Swal.fire({
+        title: "Success",
+        text: "Your morph will now last forever.",
+        icon: "success",
+        toast: true,
+        position: 'bottom',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+    });
+};
+
+// Change Name button functionality
+document.getElementById('changeNameButton').onclick = function() {
+    let player = Boot.prototype.game._state._current.user.source;
+    
+    Swal.fire({
+        title: 'Change Player Name',
+        text: 'Enter the new name:',
+        input: 'text',
+        inputAttributes: {
+            autocapitalize: 'off',
+        },
+        showCancelButton: true,
+        confirmButtonText: 'Change',
+        showLoaderOnConfirm: true,
+        preConfirm: (newName) => {
+            return new Promise((resolve, reject) => {
+                if (!newName || newName.trim() === '') {
+                    Swal.showValidationMessage('Please enter a valid name');
+                    reject('Invalid name input');
+                } else {
+                    resolve(newName);
+                }
+            });
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            const newName = result.value;
+            player.data.name = newName;
+            showSuccessMessage(`Player name changed to ${newName}`);
+            console.log(player.data);  // Output the updated player data
+        }
+    });
+};
+
+// Get All Achievements button functionality
+document.getElementById('getAllAchievementsButton').onclick = function() {
+    let player = Boot.prototype.game._state._current.user.source;
+    
+    // Assuming all possible achievements IDs range from 1 to N (update N to the max achievement ID)
+    let maxAchievementId = 100;  // Update this value accordingly
+    player.achievements.data = Array.from({ length: maxAchievementId }, (_, i) => ({ ID: i + 1, status: 'completed' }));
+    
+    showSuccessMessage("All achievements have been unlocked.");
+    console.log(player.achievements.data);  // Output the updated achievements data
+};
+
+
