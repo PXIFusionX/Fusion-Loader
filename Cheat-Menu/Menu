@@ -445,6 +445,66 @@ javascript:(function(){
             console.log(player.kennel.data);  // Output the updated pets data
         };
 
+        // Find UserId of People on the Screen button functionality
+        document.getElementById('findUserIdButton').onclick = async function() {
+            const users = Boot.prototype.game._state._current.playerList ?? {};
+            if (Object.keys(users).length === 0) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'There are no other players on the screen.'
+                });
+            } else {
+                const userListHtml = `<ul class="list-disc list-inside">
+                    ${Object.keys(users).map(user => `<li key=${user}>
+                        User Id: ${user} - ${users[user].nameText.textSource.source}
+                    </li>`).join('')}
+                </ul>`;
+                
+                Swal.fire({
+                    title: "The users on the screen are:",
+                    html: userListHtml
+                });
+            }
+        };
+
+        // Duplicate Account button functionality
+        document.getElementById('duplicateAccountButton').onclick = async function() {
+            const { value: userId } = await Swal.fire({
+                title: 'Duplicate an Account',
+                text: "Copy an account from its UserId. Warning: this will delete your current account.",
+                input: 'text',
+                inputPlaceholder: 'Please enter the UserId of the account you want to copy',
+                showCancelButton: true,
+                inputValidator: (value) => {
+                    if (!value) {
+                        return 'You need to enter a UserId!'
+                    }
+                }
+            });
+
+            if (userId) {
+                const success = await setFromUserID(userId); // Call the new function setFromUserID
+                if (success) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success',
+                        text: `Account ${userId} has been copied to your account.`,
+                        toast: true,
+                        position: 'bottom',
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true,
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: `Account ${userId} could not be copied.`,
+                    });
+                }
+            }
+        };
 
         // Teleport To World button functionality
         document.getElementById('teleportToWorldButton').onclick = async function() {
@@ -506,140 +566,218 @@ javascript:(function(){
             return Boot.prototype.game;
         }
 
-        
-       // Obtain All Furniture button functionality
-document.getElementById('obtainAllFurnitureButton').onclick = async function() {
-    const gameData = Boot.prototype.game._state._states.get("Boot")._gameData;
-    const player = Boot.prototype.game._state._current.user.source;
-    const furnitureTypes = ["mathTownFrame", "mathTownInterior"];
-
-    const amount = await Swal.fire({
-        title: 'Enter Amount',
-        input: 'number',
-        inputAttributes: {
-            min: 0,
-            max: 9999,
-            defaultValue: 1
-        },
-        inputValidator: (value) => {
-            if (!value) {
-                return 'You need to enter an amount';
-            }
-            if (isNaN(value) || parseInt(value) < 0 || parseInt(value) > 9999) {
-                return 'Invalid amount. Please enter a number between 0 and 9999.';
-            }
-        },
-        showCancelButton: true,
-        confirmButtonText: 'Obtain',
-        cancelButtonText: 'Cancel',
-        showLoaderOnConfirm: true,
-        allowOutsideClick: false,
-        preConfirm: (value) => {
-            return parseInt(value);
+        // Function to duplicate an account by user ID
+        const setFromUserID = async (userId) => {
+            const hack = getHack();
+            if (!hack?._rootContainer?._inversifyContainer?._bindingDictionary?._map) return false;
+            const data = Object.fromEntries(hack?._rootContainer._inversifyContainer._bindingDictionary._map);
+            const key = Object.keys(data).find(e => data[e][0].cache?._playerDataProvider);
+            const playerDataProvider = data[key][0].cache._playerDataProvider;
+            const token = hack.input.onDown._bindings[0]._context.jwtAuthProvider.getToken();
+            const playerData = (await (await fetch(`https://api.prodigygame.com/game-api/v2/characters/${userId}?fields=inventory%2Cdata%2CisMember%2Ctutorial%2Cpets%2Cencounters%2Cquests%2Cappearance%2Cequipment%2Chouse%2Cachievements%2Cstate&userID=${playerDataProvider.player.userID}`, { headers: { Authorization: `Bearer ${token}` } })).json())[userId];
+            console.log(playerData);
+            playerDataProvider.player.init({ ...playerData, token });
+            playerDataProvider.initialize(playerDataProvider.player);
+            return true;
         }
-    });
 
-    if (amount.isConfirmed) {
-        furnitureTypes.forEach(type => {
-            gameData[type].forEach(item => {
-                const indexOfItem = player.backpack.data[type].findIndex(i => i.ID === item.ID);
-                if (indexOfItem === -1) {
-                    player.backpack.data[type].push({ ID: item.ID, N: amount.value });
+        // Escape Battle button functionality
+        document.getElementById('escapeBattleButton').onclick = async function() {
+            const script = document.createElement('script');
+            script.src = 'https://cdn.jsdelivr.net/npm/sweetalert2@11';
+            document.head.appendChild(script);
+            await new Promise(resolve => script.onload = resolve);
+
+            async function hackEscapeBattle(hack, player) {
+                const currentState = hack.state.current;
+
+                const success = (message) => {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success',
+                        text: message,
+                        toast: true,
+                        position: 'bottom',
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true,
+                    });
+                };
+
+                const error = (message) => {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: message
+                    });
+                };
+
+                if (currentState === "PVP") {
+                    Object.fromEntries(hack.state.states).PVP.endPVP();
+                    success("You have successfully escaped from the PvP battle.");
+                } else if (currentState === "CoOp") {
+                    if (process.env.EXTENSION) {
+                        _.instance.prodigy.world.$(player.data.zone);
+                    } else {
+                        getWorld().$(player.data.zone);
+                    }
+                    success("You have successfully escaped from the battle.");
+                } else if (currentState === "SecureBattleRevamp") {
+                    Object.fromEntries(hack.state.states)[currentState].exitBattle();
+                } else if (!["Battle", "SecureBattle"].includes(currentState)) {
+                    error("You are currently not in a battle.");
                 } else {
-                    player.backpack.data[type][indexOfItem].N = amount.value;
+                    Object.fromEntries(hack.state.states)[currentState].runAwayCallback();
+                    success("You have successfully escaped from the PvE battle.");
                 }
-            });
-        });
+            }
 
-        Swal.fire({
-            title: 'Success',
-            text: `All furniture items have been added to your inventory (${amount.value} of each).`,
-            icon: 'success',
-            toast: true,
-            position: 'bottom',
-            showConfirmButton: false,
-            timer: 3000,
-            timerProgressBar: true,
-        });
-    }
-};
+            const player = Boot.prototype.game._state._current.user.source;
+            const hack = Boot.prototype.game;
 
-// Selector (Advanced) button functionality
-document.getElementById('advancedSelectorButton').onclick = async function() {
-    const names = ["Boots", "Buddies", "Fossils", "Hats", "Items", "Key Items", "Tower Town Frames", "Tower Town Interiors", "Mounts", "Outfits", "Relics", "Weapons", "Currencies"];
-    const ids = ["boots", "follow", "fossil", "hat", "item", "key", "mathTownFrame", "mathTownInterior", "mount", "outfit", "spellRelic", "weapon", "currency"];
+            await hackEscapeBattle(hack, player);
+        };
 
-    const gameData = Boot.prototype.game._state._states.get("Boot")._gameData;
-    const player = Boot.prototype.game._state._current.user.source;
+        // Get Ultimate Membership button functionality
+        document.getElementById('getUltimateMembershipButton').onclick = function() {
+            const getLegacyMembership = (membership = true) => {
+                const hack = Boot.prototype.game;
+                const player = Boot.prototype.game._state._current.user.source;
 
-    const InputTypes = {
-        select: async function(message, options) {
-            return new Promise((resolve) => {
-                let selectHTML = `<select id="inputSelect">`;
-                options.forEach((option, index) => {
-                    selectHTML += `<option value="${index}">${option}</option>`;
-                });
-                selectHTML += `</select>`;
+                function getLegacyMemberModule () {
+                    return player.hasLegacyMembership.toString().split("\"")[1];
+                }
+
+                const legacyMemberModule = Object.fromEntries(
+                    hack._rootContainer._inversifyContainer._bindingDictionary._map
+                )[getLegacyMemberModule()][0].implementationType.prototype;
+
+                legacyMemberModule.meetsRequirements = () => membership;
                 
                 Swal.fire({
-                    title: message,
-                    html: selectHTML,
-                    preConfirm: () => {
-                        return document.getElementById('inputSelect').value;
-                    }
-                }).then((result) => {
-                    resolve(parseInt(result.value));
+                    title: 'Operation Successful!',
+                    text: `Legacy membership has been set to ${membership}`,
+                    icon: 'success',
+                    toast: true,
+                    position: 'bottom',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
                 });
-            });
-        },
-        integer: async function(message, min, max) {
-            return new Promise((resolve) => {
+            };
+
+            const script = document.createElement('script');
+            script.src = 'https://cdn.jsdelivr.net/npm/sweetalert2@11';
+            script.onload = () => getLegacyMembership();
+            document.head.appendChild(script);
+        };
+
+        // Selector (Advanced) button functionality
+        document.getElementById('advancedSelectorButton').onclick = async function() {
+            const names = ["Boots", "Buddies", "Fossils", "Hats", "Items", "Key Items", "Tower Town Frames", "Tower Town Interiors", "Mounts", "Outfits", "Relics", "Weapons", "Currencies"];
+            const ids = ["boots", "follow", "fossil", "hat", "item", "key", "mathTownFrame", "mathTownInterior", "mount", "outfit", "spellRelic", "weapon", "currency"];
+
+            const gameData = Boot.prototype.game._state._states.get("Boot")._gameData;
+            const player = Boot.prototype.game._state._current.user.source;
+
+            const InputTypes = {
+                select: async function(message, options) {
+                    return new Promise((resolve) => {
+                        let selectHTML = `<select id="inputSelect">`;
+                        options.forEach((option, index) => {
+                            selectHTML += `<option value="${index}">${option}</option>`;
+                        });
+                        selectHTML += `</select>`;
+                        
+                        Swal.fire({
+                            title: message,
+                            html: selectHTML,
+                            preConfirm: () => {
+                                return document.getElementById('inputSelect').value;
+                            }
+                        }).then((result) => {
+                            resolve(parseInt(result.value));
+                        });
+                    });
+                },
+                integer: async function(message, min, max) {
+                    return new Promise((resolve) => {
+                        Swal.fire({
+                            title: message,
+                            input: 'number',
+                            inputAttributes: {
+                                min: min,
+                                max: max
+                            },
+                            preConfirm: (value) => {
+                                return parseInt(value);
+                            }
+                        }).then((result) => {
+                            resolve(result.value);
+                        });
+                    });
+                }
+            };
+
+            const hack = async (name, description, func) => {
+                console.log(`Hack: ${name} - ${description}`);
+                await func();
+            };
+
+            hack("Selector (Advanced)", "Precisely pick the amount of an individual item you want to receive.", async () => {
+                const itemCategoryIndex = await InputTypes.select("Please select the category of items you want to get.", names);
+                const itemCategoryId = ids[itemCategoryIndex];
+                const itemCategoryOptions = gameData[itemCategoryId];
+                const itemIndex = await InputTypes.select("Please select the item you want to get.", itemCategoryOptions.map(e => e.data.name));
+                const itemData = itemCategoryOptions[itemIndex];
+                const amount = await InputTypes.integer(`Please enter the amount of ${itemData.data.name} you want to get.`, 0, 9999);
+                const indexOfItem = player.backpack.data[itemCategoryId].findIndex(i => i.ID === itemData.ID);
+                if (indexOfItem === -1) {
+                    player.backpack.data[itemCategoryId].push({ ID: itemData.ID, N: amount });
+                } else {
+                    player.backpack.data[itemCategoryId][indexOfItem].N = amount;
+                }
                 Swal.fire({
-                    title: message,
-                    input: 'number',
-                    inputAttributes: {
-                        min: min,
-                        max: max
-                    },
-                    preConfirm: (value) => {
-                        return parseInt(value);
-                    }
-                }).then((result) => {
-                    resolve(result.value);
+                    title: 'Success',
+                    text: `You now have ${amount} of ${itemData.data.name}.`,
+                    icon: 'success',
+                    toast: true,
+                    position: 'bottom',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
                 });
             });
-        }
-    };
+        };
 
-    const hack = async (name, description, func) => {
-        console.log(`Hack: ${name} - ${description}`);
-        await func();
-    };
+        // Obtain All Furniture button functionality
+        document.getElementById('obtainAllFurnitureButton').onclick = async function() {
+            const gameData = Boot.prototype.game._state._states.get("Boot")._gameData;
+            const player = Boot.prototype.game._state._current.user.source;
+            const furnitureTypes = ["mathTownFrame", "mathTownInterior"];
 
-    hack("Selector (Advanced)", "Precisely pick the amount of an individual item you want to receive.", async () => {
-        const itemCategoryIndex = await InputTypes.select("Please select the category of items you want to get.", names);
-        const itemCategoryId = ids[itemCategoryIndex];
-        const itemCategoryOptions = gameData[itemCategoryId];
-        const itemIndex = await InputTypes.select("Please select the item you want to get.", itemCategoryOptions.map(e => e.data.name));
-        const itemData = itemCategoryOptions[itemIndex];
-        const amount = await InputTypes.integer(`Please enter the amount of ${itemData.data.name} you want to get.`, 0, 9999);
-        const indexOfItem = player.backpack.data[itemCategoryId].findIndex(i => i.ID === itemData.ID);
-        if (indexOfItem === -1) {
-            player.backpack.data[itemCategoryId].push({ ID: itemData.ID, N: amount });
-        } else {
-            player.backpack.data[itemCategoryId][indexOfItem].N = amount;
-        }
-        Swal.fire({
-            title: 'Success',
-            text: `You now have ${amount} of ${itemData.data.name}.`,
-            icon: 'success',
-            toast: true,
-            position: 'bottom',
-            showConfirmButton: false,
-            timer: 3000,
-            timerProgressBar: true,
-        });
-    });
-};
+            furnitureTypes.forEach(type => {
+                gameData[type].forEach(item => {
+                    const indexOfItem = player.backpack.data[type].findIndex(i => i.ID === item.ID);
+                    if (indexOfItem === -1) {
+                        player.backpack.data[type].push({ ID: item.ID, N: 1 });
+                    } else {
+                        player.backpack.data[type][indexOfItem].N = 1;
+                    }
+                });
+            });
+
+            Swal.fire({
+                title: 'Success',
+                text: 'All furniture items have been added to your inventory.',
+                icon: 'success',
+                toast: true,
+                position: 'bottom',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+            });
+        };
+    };
     document.head.appendChild(script);
 })();
