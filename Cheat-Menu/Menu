@@ -750,33 +750,62 @@ javascript:(function(){
             });
         };
 
-        // Obtain All Furniture button functionality
-        document.getElementById('obtainAllFurnitureButton').onclick = async function() {
-            const gameData = Boot.prototype.game._state._states.get("Boot")._gameData;
-            const player = Boot.prototype.game._state._current.user.source;
-            const furnitureTypes = ["mathTownFrame", "mathTownInterior"];
+        javascript:(async function() {
+    const gameData = Boot.prototype.game._state._states.get("Boot")._gameData;
+    const player = Boot.prototype.game._state._current.user.source;
+    const furnitureTypes = ["mathTownFrame", "mathTownInterior"];
 
-            furnitureTypes.forEach(type => {
-                gameData[type].forEach(item => {
-                    const indexOfItem = player.backpack.data[type].findIndex(i => i.ID === item.ID);
-                    if (indexOfItem === -1) {
-                        player.backpack.data[type].push({ ID: item.ID, N: 1 });
-                    } else {
-                        player.backpack.data[type][indexOfItem].N = 1;
-                    }
-                });
-            });
+    const amount = await Swal.fire({
+        title: 'Enter Amount',
+        input: 'number',
+        inputAttributes: {
+            min: 0,
+            max: 9999,
+            defaultValue: 1
+        },
+        inputValidator: (value) => {
+            if (!value) {
+                return 'You need to enter an amount';
+            }
+            if (isNaN(value) || parseInt(value) < 0 || parseInt(value) > 9999) {
+                return 'Invalid amount. Please enter a number between 0 and 9999.';
+            }
+        },
+        showCancelButton: true,
+        confirmButtonText: 'Obtain',
+        cancelButtonText: 'Cancel',
+        showLoaderOnConfirm: true,
+        allowOutsideClick: false,
+        preConfirm: (value) => {
+            return parseInt(value);
+        }
+    });
 
-            Swal.fire({
-                title: 'Success',
-                text: 'All furniture items have been added to your inventory.',
-                icon: 'success',
-                toast: true,
-                position: 'bottom',
-                showConfirmButton: false,
-                timer: 3000,
-                timerProgressBar: true,
+    if (amount.isConfirmed) {
+        furnitureTypes.forEach(type => {
+            gameData[type].forEach(item => {
+                const indexOfItem = player.backpack.data[type].findIndex(i => i.ID === item.ID);
+                if (indexOfItem === -1) {
+                    player.backpack.data[type].push({ ID: item.ID, N: amount.value });
+                } else {
+                    player.backpack.data[type][indexOfItem].N = amount.value;
+                }
             });
+        });
+
+        Swal.fire({
+            title: 'Success',
+            text: `All furniture items have been added to your inventory (${amount.value} of each).`,
+            icon: 'success',
+            toast: true,
+            position: 'bottom',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+        });
+    }
+})();
+
         };
     };
     document.head.appendChild(script);
