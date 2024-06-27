@@ -1,14 +1,3 @@
-// Item Stacker button functionality
-document.getElementById('itemStackerButton').onclick = function() {
-    let player = Boot.prototype.game._state._current.user.source;
-    player.backpack.data = player.backpack.data.map(item => ({
-        ...item,
-        N: 99
-    }));
-    showSuccessMessage("All inventory items have been stacked to 99.");
-    console.log(player.backpack.data);  // Output the updated inventory data
-};
-
 // Obtain All Furniture button functionality
 document.getElementById('obtainAllFurnitureButton').onclick = async function() {
     const gameData = Boot.prototype.game._state._states.get("Boot")._gameData;
