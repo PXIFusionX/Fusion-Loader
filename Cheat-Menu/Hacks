@@ -1,7 +1,4 @@
-// Load SweetAlert2
-    var script = document.createElement('script');
-    script.src = 'https://cdn.jsdelivr.net/npm/sweetalert2@11';
-    script.onload = function() {
+script.onload = function() {
         // Helper functions
         function changeLevel(level, player) {
             if (level === 1) {
@@ -204,40 +201,7 @@
             console.log(player.backpack.data);  // Output the updated inventory data
         };
 
-        // Change Name button functionality
-        document.getElementById('changeNameButton').onclick = function() {
-            let player = Boot.prototype.game._state._current.user.source;
-            
-            Swal.fire({
-                title: 'Change Player Name',
-                text: 'Enter the new name:',
-                input: 'text',
-                inputAttributes: {
-                    autocapitalize: 'off',
-                },
-                showCancelButton: true,
-                confirmButtonText: 'Change',
-                showLoaderOnConfirm: true,
-                preConfirm: (newName) => {
-                    return new Promise((resolve, reject) => {
-                        if (!newName || newName.trim() === '') {
-                            Swal.showValidationMessage('Please enter a valid name');
-                            reject('Invalid name input');
-                        } else {
-                            resolve(newName);
-                        }
-                    });
-                }
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    const newName = result.value;
-                    player.data.name = newName;
-                    showSuccessMessage(`Player name changed to ${newName}`);
-                    console.log(player.data);  // Output the updated player data
-                }
-            });
-        };
-
+        
         // Get All Achievements button functionality
         document.getElementById('getAllAchievementsButton').onclick = function() {
             let player = Boot.prototype.game._state._current.user.source;
@@ -248,31 +212,6 @@
             
             showSuccessMessage("All achievements have been unlocked.");
             console.log(player.achievements.data);  // Output the updated achievements data
-        };
-
-        // Get All Pets button functionality
-        document.getElementById('getAllPetsButton').onclick = function() {
-            let player = Boot.prototype.game._state._current.user.source;
-            let gameData = Boot.prototype.game._state._states.get("Boot")._gameData;
-            
-            player.kennel.data = gameData.pet.map(pet => ({
-                ...pet,
-                level: 100,  // Set default level for all pets
-                uid: Math.random().toString(36).substr(2, 9)  // Generate a unique id
-            }));
-            
-            showSuccessMessage("All pets have been added.");
-            console.log(player.kennel.data);  // Output the updated pets data
-        };
-
-        // Clear All Pets button functionality
-        document.getElementById('clearAllPetsButton').onclick = function() {
-            let player = Boot.prototype.game._state._current.user.source;
-            
-            player.kennel.data = [];
-            
-            showSuccessMessage("All pets have been cleared.");
-            console.log(player.kennel.data);  // Output the updated pets data
         };
 
         // Find UserId of People on the Screen button functionality
@@ -411,97 +350,6 @@
             return true;
         }
 
-        // Escape Battle button functionality
-        document.getElementById('escapeBattleButton').onclick = async function() {
-            const script = document.createElement('script');
-            script.src = 'https://cdn.jsdelivr.net/npm/sweetalert2@11';
-            document.head.appendChild(script);
-            await new Promise(resolve => script.onload = resolve);
-
-            async function hackEscapeBattle(hack, player) {
-                const currentState = hack.state.current;
-
-                const success = (message) => {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Success',
-                        text: message,
-                        toast: true,
-                        position: 'bottom',
-                        showConfirmButton: false,
-                        timer: 3000,
-                        timerProgressBar: true,
-                    });
-                };
-
-                const error = (message) => {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: message
-                    });
-                };
-
-                if (currentState === "PVP") {
-                    Object.fromEntries(hack.state.states).PVP.endPVP();
-                    success("You have successfully escaped from the PvP battle.");
-                } else if (currentState === "CoOp") {
-                    if (process.env.EXTENSION) {
-                        _.instance.prodigy.world.$(player.data.zone);
-                    } else {
-                        getWorld().$(player.data.zone);
-                    }
-                    success("You have successfully escaped from the battle.");
-                } else if (currentState === "SecureBattleRevamp") {
-                    Object.fromEntries(hack.state.states)[currentState].exitBattle();
-                } else if (!["Battle", "SecureBattle"].includes(currentState)) {
-                    error("You are currently not in a battle.");
-                } else {
-                    Object.fromEntries(hack.state.states)[currentState].runAwayCallback();
-                    success("You have successfully escaped from the PvE battle.");
-                }
-            }
-
-            const player = Boot.prototype.game._state._current.user.source;
-            const hack = Boot.prototype.game;
-
-            await hackEscapeBattle(hack, player);
-        };
-
-        // Get Ultimate Membership button functionality
-        document.getElementById('getUltimateMembershipButton').onclick = function() {
-            const getLegacyMembership = (membership = true) => {
-                const hack = Boot.prototype.game;
-                const player = Boot.prototype.game._state._current.user.source;
-
-                function getLegacyMemberModule () {
-                    return player.hasLegacyMembership.toString().split("\"")[1];
-                }
-
-                const legacyMemberModule = Object.fromEntries(
-                    hack._rootContainer._inversifyContainer._bindingDictionary._map
-                )[getLegacyMemberModule()][0].implementationType.prototype;
-
-                legacyMemberModule.meetsRequirements = () => membership;
-                
-                Swal.fire({
-                    title: 'Operation Successful!',
-                    text: `Legacy membership has been set to ${membership}`,
-                    icon: 'success',
-                    toast: true,
-                    position: 'bottom',
-                    showConfirmButton: false,
-                    timer: 3000,
-                    timerProgressBar: true,
-                });
-            };
-
-            const script = document.createElement('script');
-            script.src = 'https://cdn.jsdelivr.net/npm/sweetalert2@11';
-            script.onload = () => getLegacyMembership();
-            document.head.appendChild(script);
-        };
-
         // Selector (Advanced) button functionality
         document.getElementById('advancedSelectorButton').onclick = async function() {
             const names = ["Boots", "Buddies", "Fossils", "Hats", "Items", "Key Items", "Tower Town Frames", "Tower Town Interiors", "Mounts", "Outfits", "Relics", "Weapons", "Currencies"];
@@ -607,3 +455,6 @@
                 timer: 3000,
                 timerProgressBar: true,
             });
+        };
+    };
+    document.head.appendChild(script);
