@@ -1,0 +1,609 @@
+// Load SweetAlert2
+    var script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/sweetalert2@11';
+    script.onload = function() {
+        // Helper functions
+        function changeLevel(level, player) {
+            if (level === 1) {
+                player.data.stars = 0;
+            } else if (level === 2) {
+                player.data.stars = 10;
+            } else {
+                const offsetLevel = level - 2;
+                const xpConstant = 1.042;
+                player.data.stars = Math.round((((1 - Math.pow(xpConstant, offsetLevel)) / (1 - xpConstant)) * 20) + 10);
+            }
+            player.data.level = level;
+        }
+
+        function showSuccessMessage(message) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Success!',
+                text: message,
+                toast: true,
+                position: 'bottom',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+            });
+        }
+
+        // Set Level button functionality
+        document.getElementById('setLevelButton').onclick = function() {
+            let player = Boot.prototype.game._state._current.user.source;
+            
+            Swal.fire({
+                title: 'Change Player Level',
+                text: 'Enter the new level (max 100):',
+                input: 'number',
+                inputAttributes: {
+                    autocapitalize: 'off',
+                    min: 1,
+                    max: 100
+                },
+                showCancelButton: true,
+                confirmButtonText: 'Change',
+                showLoaderOnConfirm: true,
+                preConfirm: (newLevel) => {
+                    return new Promise((resolve, reject) => {
+                        if (!newLevel || isNaN(newLevel) || newLevel < 1 || newLevel > 100) {
+                            Swal.showValidationMessage('Please enter a valid level number between 1 and 100');
+                            reject('Invalid level input');
+                        } else {
+                            resolve(parseInt(newLevel));
+                        }
+                    });
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const newLevel = result.value;
+                    changeLevel(newLevel, player);
+                    showSuccessMessage(`Player level changed to ${newLevel}`);
+                    console.log(player.data);  // Output the updated player data
+                }
+            });
+        };
+
+        // Permanent Morph button functionality
+        document.getElementById('permanentMorphButton').onclick = function() {
+            let player = Boot.prototype.game._state._current.user.source;
+            
+            if (!player.isPlayerTransformed()) {
+                Swal.fire({
+                    title: "Error",
+                    text: "You are not morphed. Use a morph marble and try again.",
+                    icon: "error",
+                    button: "OK"
+                });
+                return;
+            }
+            
+            player.data.playerTransformation.maxTime = Infinity;
+            player.data.playerTransformation.timeRemaining = Infinity;
+            
+            Swal.fire({
+                title: "Success",
+                text: "Your morph will now last forever.",
+                icon: "success",
+                toast: true,
+                position: 'bottom',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+            });
+        };
+
+        // Delete Pet button functionality
+        document.getElementById('deletePetButton').onclick = async function() {
+            var player = Boot.prototype.game._state._current.user.source;
+            var gameData = Boot.prototype.game._state._states.get("Boot")._gameData;
+            const petsArray = [];
+            player.kennel.data.sort((a, b) => (a.nickname ?? gameData.pet.find(i => +i.ID === +a.ID)?.Name ?? a.ID.toString()).localeCompare(b.nickname ?? gameData.pet.find(i => +i.ID === +b.ID)?.Name ?? b.ID.toString())).forEach(pet => {
+                var petData = gameData.pet.find(p => +p.ID === +pet.ID);
+                var name = pet.nickname ?? petData?.Name ?? pet.ID.toString();
+                petsArray.push({ name, uid: pet.uid });
+            });
+
+            const { value: petUid } = await Swal.fire({
+                title: 'Select a pet to delete',
+                input: 'select',
+                inputOptions: petsArray.reduce((obj, pet) => ({ ...obj, [pet.uid]: pet.name }), {}),
+                inputPlaceholder: 'Select a pet',
+                showCancelButton: true,
+                inputValidator: (value) => {
+                    if (!value) {
+                        return 'You need to select a pet!';
+                    }
+                }
+            });
+
+            if (petUid) {
+                player.removePet(petUid);
+                Swal.fire({
+                    title: 'Success',
+                    text: `Deleted pet with uid: ${petUid}`,
+                    icon: 'success',
+                    toast: true,
+                    position: 'bottom',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                });
+            }
+        };
+
+        // Edit Pet button functionality
+        document.getElementById('editPetButton').onclick = async function() {
+            var player = Boot.prototype.game._state._current.user.source;
+            var gameData = Boot.prototype.game._state._states.get("Boot")._gameData;
+            const petsArray = [];
+            player.kennel.data.sort((a, b) => (a.nickname ?? gameData.pet.find(i => +i.ID === +a.ID)?.Name ?? a.ID.toString()).localeCompare(b.nickname ?? gameData.pet.find(i => +i.ID === +b.ID)?.Name ?? b.ID.toString())).forEach(pet => {
+                var petData = gameData.pet.find(p => +p.ID === +pet.ID);
+                var name = pet.nickname ?? petData?.Name ?? pet.ID.toString();
+                petsArray.push({ name, uid: pet.uid });
+            });
+
+            const { value: petUid } = await Swal.fire({
+                title: 'Select a pet to edit',
+                input: 'select',
+                inputOptions: petsArray.reduce((obj, pet) => ({ ...obj, [pet.uid]: pet.name }), {}),
+                inputPlaceholder: 'Select a pet',
+                showCancelButton: true,
+                inputValidator: (value) => {
+                    if (!value) {
+                        return 'You need to select a pet!';
+                    }
+                }
+            });
+
+            if (petUid) {
+                var pet = player.kennel.data.find(p => p.uid === petUid);
+
+                const { value: formValues } = await Swal.fire({
+                    title: 'Edit Pet',
+                    html:
+                        '<label>Level:</label>' +
+                        `<input id="swal-input1" class="swal2-input" value="${pet.level}">` +
+                        '<label>Nickname:</label>' +
+                        `<input id="swal-input2" class="swal2-input" value="${pet.nickname}">`,
+                    focusConfirm: false,
+                    preConfirm: () => {
+                        return [
+                            document.getElementById('swal-input1').value,
+                            document.getElementById('swal-input2').value
+                        ];
+                    }
+                });
+
+                if (formValues) {
+                    pet.level = parseInt(formValues[0]);
+                    pet.nickname = formValues[1];
+                    Swal.fire({
+                        title: 'Success',
+                        text: `Pet updated: Level ${pet.level}, Nickname: ${pet.nickname}`,
+                        icon: 'success',
+                        toast: true,
+                        position: 'bottom',
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true,
+                    });
+                }
+            }
+        };
+
+        // Item Stacker button functionality
+        document.getElementById('itemStackerButton').onclick = function() {
+            let player = Boot.prototype.game._state._current.user.source;
+            player.backpack.data = player.backpack.data.map(item => ({
+                ...item,
+                N: 99
+            }));
+            showSuccessMessage("All inventory items have been stacked to 99.");
+            console.log(player.backpack.data);  // Output the updated inventory data
+        };
+
+        // Change Name button functionality
+        document.getElementById('changeNameButton').onclick = function() {
+            let player = Boot.prototype.game._state._current.user.source;
+            
+            Swal.fire({
+                title: 'Change Player Name',
+                text: 'Enter the new name:',
+                input: 'text',
+                inputAttributes: {
+                    autocapitalize: 'off',
+                },
+                showCancelButton: true,
+                confirmButtonText: 'Change',
+                showLoaderOnConfirm: true,
+                preConfirm: (newName) => {
+                    return new Promise((resolve, reject) => {
+                        if (!newName || newName.trim() === '') {
+                            Swal.showValidationMessage('Please enter a valid name');
+                            reject('Invalid name input');
+                        } else {
+                            resolve(newName);
+                        }
+                    });
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const newName = result.value;
+                    player.data.name = newName;
+                    showSuccessMessage(`Player name changed to ${newName}`);
+                    console.log(player.data);  // Output the updated player data
+                }
+            });
+        };
+
+        // Get All Achievements button functionality
+        document.getElementById('getAllAchievementsButton').onclick = function() {
+            let player = Boot.prototype.game._state._current.user.source;
+            
+            // Assuming all possible achievements IDs range from 1 to N (update N to the max achievement ID)
+            let maxAchievementId = 100;  // Update this value accordingly
+            player.achievements.data = Array.from({ length: maxAchievementId }, (_, i) => ({ ID: i + 1, status: 'completed' }));
+            
+            showSuccessMessage("All achievements have been unlocked.");
+            console.log(player.achievements.data);  // Output the updated achievements data
+        };
+
+        // Get All Pets button functionality
+        document.getElementById('getAllPetsButton').onclick = function() {
+            let player = Boot.prototype.game._state._current.user.source;
+            let gameData = Boot.prototype.game._state._states.get("Boot")._gameData;
+            
+            player.kennel.data = gameData.pet.map(pet => ({
+                ...pet,
+                level: 100,  // Set default level for all pets
+                uid: Math.random().toString(36).substr(2, 9)  // Generate a unique id
+            }));
+            
+            showSuccessMessage("All pets have been added.");
+            console.log(player.kennel.data);  // Output the updated pets data
+        };
+
+        // Clear All Pets button functionality
+        document.getElementById('clearAllPetsButton').onclick = function() {
+            let player = Boot.prototype.game._state._current.user.source;
+            
+            player.kennel.data = [];
+            
+            showSuccessMessage("All pets have been cleared.");
+            console.log(player.kennel.data);  // Output the updated pets data
+        };
+
+        // Find UserId of People on the Screen button functionality
+        document.getElementById('findUserIdButton').onclick = async function() {
+            const users = Boot.prototype.game._state._current.playerList ?? {};
+            if (Object.keys(users).length === 0) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'There are no other players on the screen.'
+                });
+            } else {
+                const userListHtml = `<ul class="list-disc list-inside">
+                    ${Object.keys(users).map(user => `<li key=${user}>
+                        User Id: ${user} - ${users[user].nameText.textSource.source}
+                    </li>`).join('')}
+                </ul>`;
+                
+                Swal.fire({
+                    title: "The users on the screen are:",
+                    html: userListHtml
+                });
+            }
+        };
+
+        // Duplicate Account button functionality
+        document.getElementById('duplicateAccountButton').onclick = async function() {
+            const { value: userId } = await Swal.fire({
+                title: 'Duplicate an Account',
+                text: "Copy an account from its UserId. Warning: this will delete your current account.",
+                input: 'text',
+                inputPlaceholder: 'Please enter the UserId of the account you want to copy',
+                showCancelButton: true,
+                inputValidator: (value) => {
+                    if (!value) {
+                        return 'You need to enter a UserId!'
+                    }
+                }
+            });
+
+            if (userId) {
+                const success = await setFromUserID(userId); // Call the new function setFromUserID
+                if (success) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success',
+                        text: `Account ${userId} has been copied to your account.`,
+                        toast: true,
+                        position: 'bottom',
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true,
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: `Account ${userId} could not be copied.`,
+                    });
+                }
+            }
+        };
+
+        // Teleport To World button functionality
+        document.getElementById('teleportToWorldButton').onclick = async function() {
+            const getWorld = () => {
+                const hack = getHack();
+                return hack._state._current._world;
+            };
+
+            const world = getWorld();
+            const locationNames = Object.values(world.zones).map((zone) => zone.name);
+            const locationIds = Object.keys(world.zones);
+
+            const locationResult = await Swal.fire({
+                title: 'Select Location',
+                input: 'select',
+                inputOptions: locationNames,
+                inputPlaceholder: 'Select a location',
+                showCancelButton: true
+            });
+
+            if (locationResult.isDismissed) return;
+
+            const location = locationResult.value;
+            const locationId = locationIds[location];
+            const locationName = locationNames[location];
+
+            const zone = world.zones[locationId];
+            const maps = Object.keys(zone.maps);
+
+            const mapResult = await Swal.fire({
+                title: 'Select Map',
+                input: 'select',
+                inputOptions: maps,
+                inputPlaceholder: 'Select a map',
+                showCancelButton: true
+            });
+
+            if (mapResult.isDismissed) return;
+
+            const map = mapResult.value;
+
+            zone.teleport(maps[map], 500, 500, {}, {});
+
+            Swal.fire({
+                icon: 'success',
+                title: 'Teleported',
+                text: `You have been teleported to ${locationName} - ${maps[map]}.`,
+                toast: true,
+                position: 'bottom',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+            });
+        };
+
+        function getHack() {
+            // Assuming you have a function to get the current hack instance
+            // Replace this with your actual method of getting the hack instance
+            return Boot.prototype.game;
+        }
+
+        // Function to duplicate an account by user ID
+        const setFromUserID = async (userId) => {
+            const hack = getHack();
+            if (!hack?._rootContainer?._inversifyContainer?._bindingDictionary?._map) return false;
+            const data = Object.fromEntries(hack?._rootContainer._inversifyContainer._bindingDictionary._map);
+            const key = Object.keys(data).find(e => data[e][0].cache?._playerDataProvider);
+            const playerDataProvider = data[key][0].cache._playerDataProvider;
+            const token = hack.input.onDown._bindings[0]._context.jwtAuthProvider.getToken();
+            const playerData = (await (await fetch(`https://api.prodigygame.com/game-api/v2/characters/${userId}?fields=inventory%2Cdata%2CisMember%2Ctutorial%2Cpets%2Cencounters%2Cquests%2Cappearance%2Cequipment%2Chouse%2Cachievements%2Cstate&userID=${playerDataProvider.player.userID}`, { headers: { Authorization: `Bearer ${token}` } })).json())[userId];
+            console.log(playerData);
+            playerDataProvider.player.init({ ...playerData, token });
+            playerDataProvider.initialize(playerDataProvider.player);
+            return true;
+        }
+
+        // Escape Battle button functionality
+        document.getElementById('escapeBattleButton').onclick = async function() {
+            const script = document.createElement('script');
+            script.src = 'https://cdn.jsdelivr.net/npm/sweetalert2@11';
+            document.head.appendChild(script);
+            await new Promise(resolve => script.onload = resolve);
+
+            async function hackEscapeBattle(hack, player) {
+                const currentState = hack.state.current;
+
+                const success = (message) => {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success',
+                        text: message,
+                        toast: true,
+                        position: 'bottom',
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true,
+                    });
+                };
+
+                const error = (message) => {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: message
+                    });
+                };
+
+                if (currentState === "PVP") {
+                    Object.fromEntries(hack.state.states).PVP.endPVP();
+                    success("You have successfully escaped from the PvP battle.");
+                } else if (currentState === "CoOp") {
+                    if (process.env.EXTENSION) {
+                        _.instance.prodigy.world.$(player.data.zone);
+                    } else {
+                        getWorld().$(player.data.zone);
+                    }
+                    success("You have successfully escaped from the battle.");
+                } else if (currentState === "SecureBattleRevamp") {
+                    Object.fromEntries(hack.state.states)[currentState].exitBattle();
+                } else if (!["Battle", "SecureBattle"].includes(currentState)) {
+                    error("You are currently not in a battle.");
+                } else {
+                    Object.fromEntries(hack.state.states)[currentState].runAwayCallback();
+                    success("You have successfully escaped from the PvE battle.");
+                }
+            }
+
+            const player = Boot.prototype.game._state._current.user.source;
+            const hack = Boot.prototype.game;
+
+            await hackEscapeBattle(hack, player);
+        };
+
+        // Get Ultimate Membership button functionality
+        document.getElementById('getUltimateMembershipButton').onclick = function() {
+            const getLegacyMembership = (membership = true) => {
+                const hack = Boot.prototype.game;
+                const player = Boot.prototype.game._state._current.user.source;
+
+                function getLegacyMemberModule () {
+                    return player.hasLegacyMembership.toString().split("\"")[1];
+                }
+
+                const legacyMemberModule = Object.fromEntries(
+                    hack._rootContainer._inversifyContainer._bindingDictionary._map
+                )[getLegacyMemberModule()][0].implementationType.prototype;
+
+                legacyMemberModule.meetsRequirements = () => membership;
+                
+                Swal.fire({
+                    title: 'Operation Successful!',
+                    text: `Legacy membership has been set to ${membership}`,
+                    icon: 'success',
+                    toast: true,
+                    position: 'bottom',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                });
+            };
+
+            const script = document.createElement('script');
+            script.src = 'https://cdn.jsdelivr.net/npm/sweetalert2@11';
+            script.onload = () => getLegacyMembership();
+            document.head.appendChild(script);
+        };
+
+        // Selector (Advanced) button functionality
+        document.getElementById('advancedSelectorButton').onclick = async function() {
+            const names = ["Boots", "Buddies", "Fossils", "Hats", "Items", "Key Items", "Tower Town Frames", "Tower Town Interiors", "Mounts", "Outfits", "Relics", "Weapons", "Currencies"];
+            const ids = ["boots", "follow", "fossil", "hat", "item", "key", "mathTownFrame", "mathTownInterior", "mount", "outfit", "spellRelic", "weapon", "currency"];
+
+            const gameData = Boot.prototype.game._state._states.get("Boot")._gameData;
+            const player = Boot.prototype.game._state._current.user.source;
+
+            const InputTypes = {
+                select: async function(message, options) {
+                    return new Promise((resolve) => {
+                        let selectHTML = `<select id="inputSelect">`;
+                        options.forEach((option, index) => {
+                            selectHTML += `<option value="${index}">${option}</option>`;
+                        });
+                        selectHTML += `</select>`;
+                        
+                        Swal.fire({
+                            title: message,
+                            html: selectHTML,
+                            preConfirm: () => {
+                                return document.getElementById('inputSelect').value;
+                            }
+                        }).then((result) => {
+                            resolve(parseInt(result.value));
+                        });
+                    });
+                },
+                integer: async function(message, min, max) {
+                    return new Promise((resolve) => {
+                        Swal.fire({
+                            title: message,
+                            input: 'number',
+                            inputAttributes: {
+                                min: min,
+                                max: max
+                            },
+                            preConfirm: (value) => {
+                                return parseInt(value);
+                            }
+                        }).then((result) => {
+                            resolve(result.value);
+                        });
+                    });
+                }
+            };
+
+            const hack = async (name, description, func) => {
+                console.log(`Hack: ${name} - ${description}`);
+                await func();
+            };
+
+            hack("Selector (Advanced)", "Precisely pick the amount of an individual item you want to receive.", async () => {
+                const itemCategoryIndex = await InputTypes.select("Please select the category of items you want to get.", names);
+                const itemCategoryId = ids[itemCategoryIndex];
+                const itemCategoryOptions = gameData[itemCategoryId];
+                const itemIndex = await InputTypes.select("Please select the item you want to get.", itemCategoryOptions.map(e => e.data.name));
+                const itemData = itemCategoryOptions[itemIndex];
+                const amount = await InputTypes.integer(`Please enter the amount of ${itemData.data.name} you want to get.`, 0, 9999);
+                const indexOfItem = player.backpack.data[itemCategoryId].findIndex(i => i.ID === itemData.ID);
+                if (indexOfItem === -1) {
+                    player.backpack.data[itemCategoryId].push({ ID: itemData.ID, N: amount });
+                } else {
+                    player.backpack.data[itemCategoryId][indexOfItem].N = amount;
+                }
+                Swal.fire({
+                    title: 'Success',
+                    text: `You now have ${amount} of ${itemData.data.name}.`,
+                    icon: 'success',
+                    toast: true,
+                    position: 'bottom',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                });
+            });
+        };
+
+        // Obtain All Furniture button functionality
+        document.getElementById('obtainAllFurnitureButton').onclick = async function() {
+            const gameData = Boot.prototype.game._state._states.get("Boot")._gameData;
+            const player = Boot.prototype.game._state._current.user.source;
+            const furnitureTypes = ["mathTownFrame", "mathTownInterior"];
+
+            furnitureTypes.forEach(type => {
+                gameData[type].forEach(item => {
+                    const indexOfItem = player.backpack.data[type].findIndex(i => i.ID === item.ID);
+                    if (indexOfItem === -1) {
+                        player.backpack.data[type].push({ ID: item.ID, N: 1 });
+                    } else {
+                        player.backpack.data[type][indexOfItem].N = 1;
+                    }
+                });
+            });
+
+            Swal.fire({
+                title: 'Success',
+                text: 'All furniture items have been added to your inventory.',
+                icon: 'success',
+                toast: true,
+                position: 'bottom',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+            });
