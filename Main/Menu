@@ -1,5 +1,5 @@
 //Custom Load Screen *Fetch The Script*
-javascript:(function() {
+javascript:(async function() {
     var scriptUrls = [
         'https://raw.githubusercontent.com/PXIFusionX/PXI-Fusion-X/main/Custom-Load-Screen/Load%20Screen%20Code',
         'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/main/Hacks/Selector%20(Advanced)',
@@ -7,7 +7,7 @@ javascript:(function() {
     ]
 
     for (const url of scriptUrls) {
-        fetch(url)
+        await fetch(url)
             .then(response => response.text())
             .then(scriptContent => {
                 var script = document.createElement('script');
