@@ -4,6 +4,8 @@ javascript:(async function() {
         'https://raw.githubusercontent.com/PXIFusionX/PXI-Fusion-X/main/Custom-Load-Screen/Load%20Screen%20Code',
         'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/main/Hacks/Selector%20(Advanced)',
         'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/main/Hacks/Teleport-To-World',
+        'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/main/Hacks/Permanent-Morph',
+        'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/main/Hacks/Set%20Level%20Button'
     ]
 
     for (const url of scriptUrls) {
@@ -15,7 +17,7 @@ javascript:(async function() {
                 document.body.appendChild(script);
             })
             .catch(error => console.error('Error fetching the script:', error));
-}
+    }
 })();
 
 //Load Cheat Menu *Fetch The Script*
