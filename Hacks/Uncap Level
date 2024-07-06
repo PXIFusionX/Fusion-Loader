@@ -35,7 +35,10 @@
             Swal.fire({
                 icon: "success",
                 title: `Level Set Successfully!`,
-                text: `You are now level ${level}.`
+                text: `You are now level ${level}.`,
+                toast: true,
+                position: 'bottom',
+                showConfirmButton: true
             });
         }
     }

@@ -93,7 +93,6 @@ javascript:(function(){
                 <button>Set Name (Client-Side Only)</button>
                 <button>Set Grade</button>
                 <button>Unlimited Spins</button>
-                <button id="getUltimateMembershipButton">Get Ultimate Membership</button>
             </div>
         </div>
         <div class="section">
@@ -104,7 +103,6 @@ javascript:(function(){
                 <button>Selector (Basic)</button>
                 <button id="advancedSelectorButton">Selector (Advanced)</button>
                 <button id="obtainAllFurnitureButton">Obtain All Furniture</button>
-                <button>Complete Rune Run</button>
             </div>
         </div>
         <div class="section">
@@ -116,6 +114,7 @@ javascript:(function(){
                 <button>Add Pet</button>
                 <button id="deletePetButton">Delete Pet</button>
                 <button id="editPetButton">Edit Pet</button>
+                <button id="addPetslots">Add Pet Slots</button>
             </div>
         </div>
         <div class="section">
@@ -123,7 +122,6 @@ javascript:(function(){
             <div>
                 <button>PVP Health</button>
                 <button>Instant Kill</button>
-                <button id="escapeBattleButton">Escape Battle [PvP, PvE]</button>
                 <button>Win Battle [PvE]</button>
                 <button>Fill Battle Energy</button>
                 <button>Heal Team</button>
@@ -137,9 +135,7 @@ javascript:(function(){
                 <button>Reset Account</button>
                 <button id="findUserIdButton">Find the UserId of People on the Screen</button>
                 <button id="duplicateAccountButton">Duplicate an Account</button>
-                <button>Close All Popups</button>
                 <button>Generate Alt Account</button>
-                <button id="teleportToWorldButton">Teleport To World</button>
             </div>
         </div>
         <div class="section">
@@ -198,262 +194,6 @@ javascript:(function(){
                 timerProgressBar: true,
             });
         }
-
-
-
-        // Delete Pet button functionality
-        document.getElementById('deletePetButton').onclick = async function() {
-            var player = Boot.prototype.game._state._current.user.source;
-            var gameData = Boot.prototype.game._state._states.get("Boot")._gameData;
-            const petsArray = [];
-            player.kennel.data.sort((a, b) => (a.nickname ?? gameData.pet.find(i => +i.ID === +a.ID)?.Name ?? a.ID.toString()).localeCompare(b.nickname ?? gameData.pet.find(i => +i.ID === +b.ID)?.Name ?? b.ID.toString())).forEach(pet => {
-                var petData = gameData.pet.find(p => +p.ID === +pet.ID);
-                var name = pet.nickname ?? petData?.Name ?? pet.ID.toString();
-                petsArray.push({ name, uid: pet.uid });
-            });
-
-            const { value: petUid } = await Swal.fire({
-                title: 'Select a pet to delete',
-                input: 'select',
-                inputOptions: petsArray.reduce((obj, pet) => ({ ...obj, [pet.uid]: pet.name }), {}),
-                inputPlaceholder: 'Select a pet',
-                showCancelButton: true,
-                inputValidator: (value) => {
-                    if (!value) {
-                        return 'You need to select a pet!';
-                    }
-                }
-            });
-
-            if (petUid) {
-                player.removePet(petUid);
-                Swal.fire({
-                    title: 'Success',
-                    text: `Deleted pet with uid: ${petUid}`,
-                    icon: 'success',
-                    toast: true,
-                    position: 'bottom',
-                    showConfirmButton: false,
-                    timer: 3000,
-                    timerProgressBar: true,
-                });
-            }
-        };
-
-    
-
-    
-
-    
-
-        // Get All Achievements button functionality
-        document.getElementById('getAllAchievementsButton').onclick = function() {
-            let player = Boot.prototype.game._state._current.user.source;
-            
-            // Assuming all possible achievements IDs range from 1 to N (update N to the max achievement ID)
-            let maxAchievementId = 100;  // Update this value accordingly
-            player.achievements.data = Array.from({ length: maxAchievementId }, (_, i) => ({ ID: i + 1, status: 'completed' }));
-            
-            showSuccessMessage("All achievements have been unlocked.");
-            console.log(player.achievements.data);  // Output the updated achievements data
-        };
-
-        // Get All Pets button functionality
-        document.getElementById('getAllPetsButton').onclick = function() {
-            let player = Boot.prototype.game._state._current.user.source;
-            let gameData = Boot.prototype.game._state._states.get("Boot")._gameData;
-            
-            player.kennel.data = gameData.pet.map(pet => ({
-                ...pet,
-                level: 100,  // Set default level for all pets
-                uid: Math.random().toString(36).substr(2, 9)  // Generate a unique id
-            }));
-            
-            showSuccessMessage("All pets have been added.");
-            console.log(player.kennel.data);  // Output the updated pets data
-        };
-
-        // Clear All Pets button functionality
-        document.getElementById('clearAllPetsButton').onclick = function() {
-            let player = Boot.prototype.game._state._current.user.source;
-            
-            player.kennel.data = [];
-            
-            showSuccessMessage("All pets have been cleared.");
-            console.log(player.kennel.data);  // Output the updated pets data
-        };
-
-        // Find UserId of People on the Screen button functionality
-        document.getElementById('findUserIdButton').onclick = async function() {
-            const users = Boot.prototype.game._state._current.playerList ?? {};
-            if (Object.keys(users).length === 0) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'There are no other players on the screen.'
-                });
-            } else {
-                const userListHtml = `<ul class="list-disc list-inside">
-                    ${Object.keys(users).map(user => `<li key=${user}>
-                        User Id: ${user} - ${users[user].nameText.textSource.source}
-                    </li>`).join('')}
-                </ul>`;
-                
-                Swal.fire({
-                    title: "The users on the screen are:",
-                    html: userListHtml
-                });
-            }
-        };
-
-        // Duplicate Account button functionality
-        document.getElementById('duplicateAccountButton').onclick = async function() {
-            const { value: userId } = await Swal.fire({
-                title: 'Duplicate an Account',
-                text: "Copy an account from its UserId. Warning: this will delete your current account.",
-                input: 'text',
-                inputPlaceholder: 'Please enter the UserId of the account you want to copy',
-                showCancelButton: true,
-                inputValidator: (value) => {
-                    if (!value) {
-                        return 'You need to enter a UserId!'
-                    }
-                }
-            });
-
-            if (userId) {
-                const success = await setFromUserID(userId); // Call the new function setFromUserID
-                if (success) {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Success',
-                        text: `Account ${userId} has been copied to your account.`,
-                        toast: true,
-                        position: 'bottom',
-                        showConfirmButton: false,
-                        timer: 3000,
-                        timerProgressBar: true,
-                    });
-                } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: `Account ${userId} could not be copied.`,
-                    });
-                }
-            }
-        };
-
-    
-
-        function getHack() {
-            // Assuming you have a function to get the current hack instance
-            // Replace this with your actual method of getting the hack instance
-            return Boot.prototype.game;
-        }
-
-        // Function to duplicate an account by user ID
-        const setFromUserID = async (userId) => {
-            const hack = getHack();
-            if (!hack?._rootContainer?._inversifyContainer?._bindingDictionary?._map) return false;
-            const data = Object.fromEntries(hack?._rootContainer._inversifyContainer._bindingDictionary._map);
-            const key = Object.keys(data).find(e => data[e][0].cache?._playerDataProvider);
-            const playerDataProvider = data[key][0].cache._playerDataProvider;
-            const token = hack.input.onDown._bindings[0]._context.jwtAuthProvider.getToken();
-            const playerData = (await (await fetch(`https://api.prodigygame.com/game-api/v2/characters/${userId}?fields=inventory%2Cdata%2CisMember%2Ctutorial%2Cpets%2Cencounters%2Cquests%2Cappearance%2Cequipment%2Chouse%2Cachievements%2Cstate&userID=${playerDataProvider.player.userID}`, { headers: { Authorization: `Bearer ${token}` } })).json())[userId];
-            console.log(playerData);
-            playerDataProvider.player.init({ ...playerData, token });
-            playerDataProvider.initialize(playerDataProvider.player);
-            return true;
-        }
-
-        // Escape Battle button functionality
-        document.getElementById('escapeBattleButton').onclick = async function() {
-            const script = document.createElement('script');
-            script.src = 'https://cdn.jsdelivr.net/npm/sweetalert2@11';
-            document.head.appendChild(script);
-            await new Promise(resolve => script.onload = resolve);
-
-            async function hackEscapeBattle(hack, player) {
-                const currentState = hack.state.current;
-
-                const success = (message) => {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Success',
-                        text: message,
-                        toast: true,
-                        position: 'bottom',
-                        showConfirmButton: false,
-                        timer: 3000,
-                        timerProgressBar: true,
-                    });
-                };
-
-                const error = (message) => {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: message
-                    });
-                };
-
-                if (currentState === "PVP") {
-                    Object.fromEntries(hack.state.states).PVP.endPVP();
-                    success("You have successfully escaped from the PvP battle.");
-                } else if (currentState === "CoOp") {
-                    if (process.env.EXTENSION) {
-                        _.instance.prodigy.world.$(player.data.zone);
-                    } else {
-                        getWorld().$(player.data.zone);
-                    }
-                    success("You have successfully escaped from the battle.");
-                } else if (currentState === "SecureBattleRevamp") {
-                    Object.fromEntries(hack.state.states)[currentState].exitBattle();
-                } else if (!["Battle", "SecureBattle"].includes(currentState)) {
-                    error("You are currently not in a battle.");
-                } else {
-                    Object.fromEntries(hack.state.states)[currentState].runAwayCallback();
-                    success("You have successfully escaped from the PvE battle.");
-                }
-            }
-
-            const player = Boot.prototype.game._state._current.user.source;
-            const hack = Boot.prototype.game;
-
-            await hackEscapeBattle(hack, player);
-        };
-
-
-
-        // Obtain All Furniture button functionality
-        document.getElementById('obtainAllFurnitureButton').onclick = async function() {
-            const gameData = Boot.prototype.game._state._states.get("Boot")._gameData;
-            const player = Boot.prototype.game._state._current.user.source;
-            const furnitureTypes = ["mathTownFrame", "mathTownInterior"];
-
-            furnitureTypes.forEach(type => {
-                gameData[type].forEach(item => {
-                    const indexOfItem = player.backpack.data[type].findIndex(i => i.ID === item.ID);
-                    if (indexOfItem === -1) {
-                        player.backpack.data[type].push({ ID: item.ID, N: 1 });
-                    } else {
-                        player.backpack.data[type][indexOfItem].N = 1;
-                    }
-                });
-            });
-
-            Swal.fire({
-                title: 'Success',
-                text: 'All furniture items have been added to your inventory.',
-                icon: 'success',
-                toast: true,
-                position: 'bottom',
-                showConfirmButton: false,
-                timer: 3000,
-                timerProgressBar: true,
-            });
-        };
     };
     document.head.appendChild(script);
 })();
