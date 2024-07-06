@@ -1,0 +1,45 @@
+javascript:(function() {
+    // Load SweetAlert from CDN
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/sweetalert2@11';
+    script.onload = async function() {
+        // SweetAlert is loaded, now execute your code
+        const { value } = await Swal.fire({
+            title: 'Enter Amount of Gold',
+            input: 'number',
+            inputAttributes: {
+                min: 1,
+                max: 9000000,
+                step: 1
+            },
+            inputValidator: (value) => {
+                if (!value || value < 1 || value > 9000000) {
+                    return 'Please enter a valid amount of gold (1 - 9,000,000)';
+                }
+            },
+            showCancelButton: true,
+            cancelButtonText: 'Cancel',
+            confirmButtonText: 'Set Gold',
+            showLoaderOnConfirm: true,
+            preConfirm: (amount) => {
+                // Simulate setting player's gold (replace with actual logic)
+                const player = Boot.prototype.game._state._current.user.source;
+                player.data.gold = amount;
+                return amount;
+            },
+            allowOutsideClick: () => !Swal.isLoading()
+        });
+
+        // Handle success message with SweetAlert
+        if (value) {
+            Swal.fire({
+                position: 'bottom',
+                icon: 'success',
+                title: `You now have ${value} gold.`,
+                showConfirmButton: false,
+                timer: 3000
+            });
+        }
+    };
+    document.head.appendChild(script);
+})();
