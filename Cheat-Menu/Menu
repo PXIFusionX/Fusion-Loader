@@ -89,6 +89,7 @@ javascript:(function(){
                 <button>Set Losses</button>
                 <button id="getAllAchievementsButton">Get All Achievements</button>
                 <button>Set Dark Tower Floor</button>
+                <button id="completeQuest">Complete Current Task In Quest</button>
                 <button id="changeNameButton">Change Name</button>
                 <button>Set Name (Client-Side Only)</button>
                 <button>Set Grade</button>

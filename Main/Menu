@@ -6,7 +6,8 @@ javascript:(async function() {
         'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/main/Hacks/Teleport-To-World',
         'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/main/Hacks/Permanent-Morph',
         'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/main/Hacks/Set%20Level%20Button',
-        'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/main/Hacks/Uncap%20Level'
+        'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/main/Hacks/Uncap%20Level',
+        'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/main/Hacks/Set-Gold'
     ]
 
     for (const url of scriptUrls) {

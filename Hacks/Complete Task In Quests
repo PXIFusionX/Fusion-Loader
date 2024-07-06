@@ -1,0 +1,46 @@
+(async () => {
+    document.getElementById('completeQuest').onclick = async function() {
+    const getHack = () => Boot.prototype.game;
+    const getWorld = () => {
+        const hack = getHack();
+        return hack._state._current._world;
+    };
+
+    const world = getWorld();
+    const zones = {};
+    Object.keys(world.zones).forEach(element => {
+        zones[element] = world.zones[element].name;
+    });
+
+    // Load SweetAlert2
+    const swalScript = document.createElement('script');
+    swalScript.src = "https://cdn.jsdelivr.net/npm/sweetalert2@11";
+    document.head.appendChild(swalScript);
+    await new Promise(resolve => swalScript.onload = resolve);
+
+    const { value: questName } = await Swal.fire({
+        title: 'Please select the quest you want to complete.',
+        input: 'select',
+        inputOptions: zones,
+        inputPlaceholder: 'Select a quest',
+        showCancelButton: true,
+    });
+
+    if (questName) {
+        const questID = world.zones[questName].getCurrentQuestID();
+        if (world.zones[questName].completeQuest(questID)) {
+            world.goToZoneHub(questName);
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: `Completed current task in the ${world.zones[questName].name} quest successfully!`,
+                position: 'bottom',
+                showConfirmButton: true
+            });
+        } else {
+            Swal.fire('Error', 'There was an error completing the quest. Did you already complete it?', 'error');
+        }
+    } else {
+        Swal.fire('Cancelled', 'No quest was selected', 'info');
+    }
+}})();
