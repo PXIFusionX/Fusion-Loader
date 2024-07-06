@@ -3,8 +3,8 @@
             let player = Boot.prototype.game._state._current.user.source;
             
             Swal.fire({
-                title: 'Change Player Level',
-                text: 'Enter the new level (max 100):',
+                title: 'Set Level',
+                text: 'Enter the new level:',
                 input: 'number',
                 inputAttributes: {
                     autocapitalize: 'off',
