@@ -1,56 +1,69 @@
 // JavaScript Bookmarklet for Dark Tower Floor Setter with SweetAlert
 
-// Define the hack function with SweetAlert integration
-function hack(description, instruction, callback) {
-    Swal.fire({
-        title: description,
-        text: instruction,
-        input: 'number',
-        inputLabel: 'Enter the floor (1-100):',
-        inputAttributes: {
-            min: 1,
-            max: 100,
-            step: 1
-        },
-        showCancelButton: true,
-        confirmButtonText: 'Set Floor',
-        showLoaderOnConfirm: true,
-        preConfirm: async (floor) => {
-            await callback(hack, { data: { tower: floor } });
-        }
-    }).then((result) => {
-        if (result.isConfirmed) {
-            Swal.fire({
-                title: 'Success!',
-                text: `You are now on floor ${result.value}.`,
-                icon: 'success'
-            });
-        }
+// Load SweetAlert library from CDN
+(function () {
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.js';
+    script.onload = function () {
+        // SweetAlert loaded, now execute the main script
+        initHack();
+    };
+    document.head.appendChild(script);
+})();
+
+// Define the main function for Dark Tower floor setting with SweetAlert
+function initHack() {
+    function hack(description, instruction, callback) {
+        Swal.fire({
+            title: description,
+            text: instruction,
+            input: 'number',
+            inputLabel: 'Enter the floor (1-100):',
+            inputAttributes: {
+                min: 1,
+                max: 100,
+                step: 1
+            },
+            showCancelButton: true,
+            confirmButtonText: 'Set Floor',
+            showLoaderOnConfirm: true,
+            preConfirm: async (floor) => {
+                await callback(hack, { data: { tower: floor } });
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: 'Success!',
+                    text: `You are now on floor ${result.value}.`,
+                    icon: 'success'
+                });
+            }
+        });
+    }
+
+    // Execute the hack function for Dark Tower Floor setting
+    hack("Set Dark Tower Floor", "Set's the floor you are on in the dark tower.", async (hack, player) => {
+        const floor = await Swal.fire({
+            title: 'Please enter the floor you want to be on.',
+            input: 'number',
+            inputLabel: 'Enter the floor (1-100):',
+            inputAttributes: {
+                min: 1,
+                max: 100,
+                step: 1
+            },
+            showCancelButton: true,
+            confirmButtonText: 'Set Floor'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const floor = result.value;
+                player.data.tower = floor;
+                Swal.fire({
+                    title: 'Success!',
+                    text: `You are now on floor ${floor}.`,
+                    icon: 'success'
+                });
+            }
+        });
     });
 }
-
-// Execute the hack function for Dark Tower Floor setting
-hack("Set Dark Tower Floor", "Set's the floor you are on in the dark tower.", async (hack, player) => {
-    const floor = await Swal.fire({
-        title: 'Please enter the floor you want to be on.',
-        input: 'number',
-        inputLabel: 'Enter the floor (1-100):',
-        inputAttributes: {
-            min: 1,
-            max: 100,
-            step: 1
-        },
-        showCancelButton: true,
-        confirmButtonText: 'Set Floor'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            const floor = result.value;
-            player.data.tower = floor;
-            Swal.fire({
-                title: 'Success!',
-                text: `You are now on floor ${floor}.`,
-                icon: 'success'
-            });
-        }
-    });
-})();
