@@ -1,0 +1,11 @@
+// Get All Achievements button functionality
+        document.getElementById('getAllAchievementsButton').onclick = function() {
+            let player = Boot.prototype.game._state._current.user.source;
+            
+            // Assuming all possible achievements IDs range from 1 to N (update N to the max achievement ID)
+            let maxAchievementId = 100;  // Update this value accordingly
+            player.achievements.data = Array.from({ length: maxAchievementId }, (_, i) => ({ ID: i + 1, status: 'completed' }));
+            
+            showSuccessMessage("All achievements have been unlocked.");
+            console.log(player.achievements.data);  // Output the updated achievements data
+        };
