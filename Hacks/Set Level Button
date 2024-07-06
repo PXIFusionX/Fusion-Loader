@@ -30,6 +30,14 @@
                     changeLevel(newLevel, player);
                     showSuccessMessage(`Player level changed to ${newLevel}`);
                     console.log(player.data);  // Output the updated player data
+                    Swal.fire({
+                        title: 'Success',
+                        text: `Level changed to ${newLevel}.`,
+                        icon: 'success',
+                        toast: true,
+                        position: 'bottom',
+                        showConfirmButton: true,
+                    });
                 }
             });
         };
