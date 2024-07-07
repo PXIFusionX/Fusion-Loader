@@ -31,11 +31,12 @@
         if (world.zones[questName].completeQuest(questID)) {
             world.goToZoneHub(questName);
             Swal.fire({
-                icon: 'success',
                 title: 'Success',
                 text: `Completed current task in the ${world.zones[questName].name} quest successfully!`,
+                icon: 'success',
+                toast: true,
                 position: 'bottom',
-                showConfirmButton: true
+                showConfirmButton: false,
             });
         } else {
             Swal.fire('Error', 'There was an error completing the quest. Did you already complete it?', 'error');
