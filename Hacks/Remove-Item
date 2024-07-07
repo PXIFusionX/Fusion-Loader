@@ -85,11 +85,12 @@
                     }
 
                     Swal.fire({
-                        icon: 'success',
-                        title: `${amountToRemove} ${selectedItem.data.name} removed successfully`,
-                        showConfirmButton: false,
-                        timer: 1500
-                    
+                        icon: "success",
+                        title: `Removed Item!`,
+                        text: `${amountToRemove} ${selectedItem.data.name} removed successfully`,
+                        toast: true,
+                        position: 'bottom',
+                        showConfirmButton: true
                     });
                 }
             }
