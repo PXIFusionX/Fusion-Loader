@@ -97,6 +97,9 @@
         }
     }
 
+
+    //Make sure it saves
+    Boot.prototype.game._state._current.user.source.backpack.updated=true
     // Execute the deleteItem function
     deleteItem("Delete Item", "Precisely delete an item from your inventory.", deleteItem);
 }})();
