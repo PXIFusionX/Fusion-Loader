@@ -36,7 +36,7 @@
                 icon: 'success',
                 toast: true,
                 position: 'bottom',
-                showConfirmButton: false,
+                showConfirmButton: true,
             });
         } else {
             Swal.fire('Error', 'There was an error completing the quest. Did you already complete it?', 'error');
