@@ -10,6 +10,8 @@ javascript:(async function() {
         'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/main/Hacks/Set-Gold',
         'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/main/Hacks/Complete%20Task%20In%20Quests',
         'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/main/Hacks/Remove-Item',
+        'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/main/Hacks/Delete-Pet',
+        '
     ]
 
     for (const url of scriptUrls) {
