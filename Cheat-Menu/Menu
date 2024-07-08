@@ -104,6 +104,7 @@ javascript:(function(){
                 <button id="advancedSelectorButton">Selector (Advanced)</button>
                 <button id="removeItem"> Remove Item</button>
                 <button id="obtainAllFurnitureButton">Obtain All Furniture</button>
+                <button id="saveInventory">Save Inventory</button>
             </div>
         </div>
         <div class="section">
@@ -112,8 +113,8 @@ javascript:(function(){
                 <button id="getAllPetsButton">Get All Pets</button>
                 <button id="clearAllPetsButton">Clear All Pets</button>
                 <button>Fix Battle Crash</button>
-                <button>Add Pet</button>
-                <button id="deletePetButton">Delete Pet</button>
+                <button id="addPet">Add Pet</button>
+                <button id="deletePet">Delete Pet</button>
                 <button id="editPetButton">Edit Pet</button>
                 <button id="addPetslots">Add Pet Slots</button>
             </div>
