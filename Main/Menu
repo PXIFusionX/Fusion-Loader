@@ -14,6 +14,7 @@ javascript:(async function() {
         'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/main/Hacks/Add-Pet',
         'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/main/Hacks/Clear-Inventory',
         'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/main/Hacks/Obtain-Furniture',
+        'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/main/Hacks/Item-Stacker',
     ]
 
     for (const url of scriptUrls) {
