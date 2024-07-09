@@ -103,7 +103,7 @@ javascript:(function(){
                 <button id="selectorBasic">Selector (Basic)</button>
                 <button id="advancedSelectorButton">Selector (Advanced)</button>
                 <button id="removeItem"> Remove Item</button>
-                <button id="obtainAllFurnitureButton">Obtain All Furniture</button>
+                <button id="obtainFurniture">Obtain All Furniture</button>
                 <button id="saveInventory">Save Inventory</button>
             </div>
         </div>
