@@ -13,6 +13,7 @@ javascript:(async function() {
         'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/main/Hacks/Delete-Pet',
         'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/main/Hacks/Add-Pet',
         'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/main/Hacks/Clear-Inventory',
+        'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/main/Hacks/Obtain-Furniture',
     ]
 
     for (const url of scriptUrls) {
