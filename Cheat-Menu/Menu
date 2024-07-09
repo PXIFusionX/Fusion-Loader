@@ -99,7 +99,7 @@ javascript:(function(){
             <h2>Inventory Hacks</h2>
             <div>
                 <button id="itemStackerButton">Item Stacker</button>
-                <button>Clear Inventory</button>
+                <button id="clearInventory">Clear Inventory</button>
                 <button id="selectorBasic">Selector (Basic)</button>
                 <button id="advancedSelectorButton">Selector (Advanced)</button>
                 <button id="removeItem"> Remove Item</button>
