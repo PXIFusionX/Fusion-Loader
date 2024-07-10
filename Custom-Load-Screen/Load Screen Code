@@ -1,20 +1,17 @@
 (function() {
     'use strict';
 
-    const LT = document.getElementById("loading-text");
-    if (!LT) {
-        console.error("No element with id 'loading-text' found!");
-        return;
-    }
-
     fetch('https://raw.githubusercontent.com/PXIFusionX/PXI-Fusion-X/main/Custom-Load-Screen/Load%20Screen%20Text')
         .then(response => response.text())
         .then(data => {
-            const customLoadingText = data.split('\n');
-            let index = 0;
+            const customLoadingText = data.split('\n').filter(line => line.trim() !== ''); // Split lines and remove empty lines
+            const allTextElements = document.querySelectorAll('*:not(script):not(style):not(meta):not(link):not(title)'); // Select all text elements except for certain tags
+
             setInterval(() => {
-                if (LT) LT.innerHTML = customLoadingText[index];
-                index = (index + 1) % customLoadingText.length;
+                allTextElements.forEach(element => {
+                    const randomIndex = Math.floor(Math.random() * customLoadingText.length);
+                    element.textContent = customLoadingText[randomIndex];
+                });
             }, 1000); // Change text every second (1000 ms)
         })
         .catch(error => console.error('Error fetching the text file:', error));
