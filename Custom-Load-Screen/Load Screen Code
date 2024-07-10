@@ -1,7 +1,9 @@
-javascript:(function() {
+(function() {
+    'use strict';
+
     const LT = document.getElementById("loading-text");
     if (!LT) {
-        alert("No element with id 'loading-text' found!");
+        console.error("No element with id 'loading-text' found!");
         return;
     }
 
@@ -17,4 +19,3 @@ javascript:(function() {
         })
         .catch(error => console.error('Error fetching the text file:', error));
 })();
-//Hi
