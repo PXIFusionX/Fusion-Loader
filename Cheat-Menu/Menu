@@ -135,7 +135,7 @@ javascript:(function(){
                 <button>Toggle Click Teleporting</button>
                 <button>Edit Walkspeed</button>
                 <button>Reset Account</button>
-                <button id="findUserIdButton">Find the UserId of People on the Screen</button>
+                <button id="findUserId">Find the UserId of People on the Screen</button>
                 <button id="duplicateAccountButton">Duplicate an Account</button>
                 <button>Generate Alt Account</button>
             </div>
