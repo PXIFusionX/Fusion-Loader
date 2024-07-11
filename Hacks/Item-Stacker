@@ -87,7 +87,7 @@
         input: 'number',
         inputAttributes: {
             min: 0,
-            max: 902749274939473,
+            max: 9999,
             step: 1
         },
         showCancelButton: true,
