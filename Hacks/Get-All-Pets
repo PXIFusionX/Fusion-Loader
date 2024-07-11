@@ -1,0 +1,116 @@
+(function() {
+    document.getElementById('getAllPets').onclick = async function() {
+    // Function to retrieve XP based on level
+    function getXP(level) {
+        if (level === 1) {
+            return 0;
+        } else if (level === 2) {
+            return 10;
+        }
+        const offsetLevel = level - 2;
+        const xpConstant = 1.042;
+        return Math.round((((1 - Math.pow(xpConstant, offsetLevel)) / (1 - xpConstant)) * 20) + 10);
+    }
+
+    // Function to calculate HP based on level and pet data
+    function getHpFromPet(level, petGameData) {
+        const statValue = petGameData.data.statHealth;
+        const level1Hp = (500 / 1.25) * Math.pow(Math.pow(1.25, 0.25), statValue - 1);
+        const hpInc = (100 / 1.25) * Math.pow(Math.pow(1.25, 0.25), statValue - 1);
+
+        return Math.ceil(level1Hp + (level - 1) * hpInc);
+    }
+
+    // Function to generate a random integer between min and max (inclusive)
+    function randomIntFromInterval(min, max) {
+        return Math.floor(Math.random() * (max - min + 1) + min);
+    }
+
+    // Function to display a success message using SweetAlert
+    function successMessage(message) {
+        Swal.fire({
+            icon: 'success',
+            title: 'Success!',
+            text: message,
+            toast: true,
+            position: 'bottom',
+            showConfirmButton: false,
+            timer: 3000
+        });
+    }
+
+    // Function to display an error message using SweetAlert
+    function errorMessage(message) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error!',
+            text: message,
+            toast: true,
+            position: 'bottom',
+            showConfirmButton: false,
+            timer: 3000
+        });
+    }
+
+    try {
+        // Access necessary game data and player info
+        const player = Boot.prototype.game._state._current.user.source;
+        const gameData = Boot.prototype.game._state._states.get("Boot")._gameData;
+
+        // Prompt user for the level they want pets to be using SweetAlert
+        Swal.fire({
+            title: 'Enter Pet Level',
+            text: 'Please enter the level you want the pets to be (1-100):',
+            input: 'number',
+            inputAttributes: {
+                min: 1,
+                max: 100,
+                step: 1
+            },
+            showCancelButton: true,
+            confirmButtonText: 'Add Pets',
+            cancelButtonText: 'Cancel',
+            inputValidator: (value) => {
+                if (!value || value < 1 || value > 100) {
+                    return 'Invalid level. Please enter a number between 1 and 100.';
+                }
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const parsedLevel = parseInt(result.value, 10);
+
+                // Add all pets to the player's kennel
+                getAllPets(parsedLevel, gameData, player);
+
+                // Display success message
+                successMessage("You now have every pet in the game.");
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                // User canceled, do nothing
+            }
+        });
+    } catch (error) {
+        console.error('Error:', error);
+        errorMessage('An error occurred. Please try again.');
+    }
+
+    // Function to add all pets to the player's kennel
+    function getAllPets(level, gameData, player) {
+        const xp = getXP(level);
+        const pets = gameData.pet;
+
+        pets.forEach(pet => {
+            const petId = pet.data.member === 0 ? pet.ID : pet.ID.toString();
+            const hp = getHpFromPet(level, pet);
+            player.kennel.addPet(petId, hp, xp, level);
+        });
+
+        // Set initial encounter info for each pet
+        player.kennel._encounterInfo._data.pets = pets.map(pet => ({
+            firstSeenDate: Date.now() - randomIntFromInterval(20000, 120000),
+            ID: pet.ID,
+            timesBattled: 1,
+            timesRescued: 1,
+            rescueAttempts: 1
+        }));
+    }
+}})();
