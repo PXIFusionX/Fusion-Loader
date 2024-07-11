@@ -17,7 +17,7 @@ javascript:(async function() {
         'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/main/Hacks/Item-Stacker',
         'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/main/Hacks/Find-UserID',
         'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/main/Hacks/Get-All-Pets',
-        '
+        'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/main/Main/Sweet%20Alert',
     ]
 
     for (const url of scriptUrls) {
