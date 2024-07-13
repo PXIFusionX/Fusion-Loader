@@ -8,7 +8,7 @@ javascript:(function(){
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(255, 255, 255, 0.5); /* Half-transparent background */
+            background: rgba(255, 255, 255, 0.9); /* Slightly transparent background */
             color: #000;
             z-index: 10000;
             padding: 20px;
@@ -21,6 +21,17 @@ javascript:(function(){
         }
         #cheatMenu.hidden {
             top: -100%; /* Slide out towards the top */
+        }
+        #cheatMenu.hiding {
+            animation: slideUp 0.3s ease-in-out; /* Slide up animation */
+        }
+        @keyframes slideUp {
+            0% {
+                top: 0;
+            }
+            100% {
+                top: -100%;
+            }
         }
         #cheatMenu h1 {
             text-align: center;
@@ -139,6 +150,7 @@ javascript:(function(){
         <div class="section">
             <h2>Utility Hacks</h2>
             <div>
+                <button id="toggleTeleport">Teleport (Toggle)</button>
                 <button>Toggle Click Teleporting</button>
                 <button>Edit Walkspeed</button>
                 <button>Reset Account</button>
@@ -171,7 +183,27 @@ javascript:(function(){
             menu.classList.add('visible');
         } else {
             menu.classList.remove('visible');
-            menu.classList.add('hidden');
+            menu.classList.add('hiding'); // Trigger slide up animation
+            setTimeout(function() {
+                menu.classList.remove('hiding');
+                menu.classList.add('hidden');
+            }, 300); // Same duration as the animation
+        }
+    };
+
+    // Toggle teleport functionality
+    var teleportEnabled = false;
+    var toggleTeleportButton = document.getElementById('toggleTeleport');
+    toggleTeleportButton.onclick = function() {
+        teleportEnabled = !teleportEnabled;
+        if (teleportEnabled) {
+            toggleTeleportButton.style.backgroundColor = '#27ae60'; // Green when enabled
+            // Implement your teleport logic here
+            console.log('Teleport enabled');
+        } else {
+            toggleTeleportButton.style.backgroundColor = '#3498db'; // Default blue
+            // Implement logic to disable teleport
+            console.log('Teleport disabled');
         }
     };
 
