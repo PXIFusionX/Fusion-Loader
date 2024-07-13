@@ -4,17 +4,23 @@ javascript:(function(){
     style.innerHTML = `
         #cheatMenu {
             position: fixed;
-            top: 0;
+            top: -100%; /* Initially off-screen */
             left: 0;
             width: 100%;
             height: 100%;
             background: rgba(255, 255, 255, 0.5); /* Half-transparent background */
             color: #000;
-            display: none;
             z-index: 10000;
             padding: 20px;
             overflow: auto;
             box-sizing: border-box;
+            transition: top 0.3s ease-in-out; /* Smooth transition */
+        }
+        #cheatMenu.visible {
+            top: 0; /* Slide in from the top */
+        }
+        #cheatMenu.hidden {
+            top: -100%; /* Slide out towards the top */
         }
         #cheatMenu h1 {
             text-align: center;
@@ -72,6 +78,7 @@ javascript:(function(){
     // Create the cheat menu container
     var menu = document.createElement('div');
     menu.id = 'cheatMenu';
+    menu.className = 'hidden'; // Initially hidden off-screen
     menu.innerHTML = `
         <h1>PXI Fusion X Cheat Menu</h1>
         <p>Join our discord for hack updates & support: discord.gg/YRtWbJrmGa</p>
@@ -157,12 +164,14 @@ javascript:(function(){
     toggle.innerHTML = '&#x25B2;';
     document.body.appendChild(toggle);
 
-    // Toggle menu visibility
+    // Toggle menu visibility with animation
     toggle.onclick = function() {
-        if (menu.style.display === 'none' || menu.style.display === '') {
-            menu.style.display = 'block';
+        if (menu.classList.contains('hidden')) {
+            menu.classList.remove('hidden');
+            menu.classList.add('visible');
         } else {
-            menu.style.display = 'none';
+            menu.classList.remove('visible');
+            menu.classList.add('hidden');
         }
     };
 
