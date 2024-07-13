@@ -8,7 +8,7 @@ javascript:(function(){
             left: 0;
             width: 100%;
             height: 100%;
-            background: white;
+            background: rgba(255, 255, 255, 0.5); /* Half-transparent background */
             color: #000;
             display: none;
             z-index: 10000;
@@ -102,7 +102,7 @@ javascript:(function(){
                 <button id="clearInventory">Clear Inventory</button>
                 <button id="selectorBasic">Selector (Basic)</button>
                 <button id="advancedSelectorButton">Selector (Advanced)</button>
-                <button id="removeItem"> Remove Item</button>
+                <button id="removeItem">Remove Item</button>
                 <button id="obtainFurniture">Obtain All Furniture</button>
                 <button id="saveInventory">Save Inventory</button>
             </div>
