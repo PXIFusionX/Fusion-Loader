@@ -1,4 +1,4 @@
-(function(){
+javascript:(function(){
     // Create styles for the cheat menu
     var style = document.createElement('style');
     style.innerHTML = `
