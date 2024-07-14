@@ -74,6 +74,10 @@ javascript:(function(){
             cursor: pointer;
             z-index: 10001;
             border: 1px solid #000;
+            transition: transform 0.3s ease; /* Smooth transition for transform */
+        }
+        #toggleMenu.rotated {
+            transform: rotate(180deg); /* Rotate the arrow 180 degrees */
         }
         .swal2-container {
             z-index: 10001 !important;
@@ -82,6 +86,33 @@ javascript:(function(){
             bottom: 0;
             left: 50%;
             transform: translateX(-50%);
+        }
+        .toggle-switch {
+            display: inline-block;
+            height: 30px;
+            width: 60px;
+            position: relative;
+            cursor: pointer;
+            background-color: #ccc;
+            border-radius: 15px;
+            transition: background-color 0.3s ease;
+        }
+        .toggle-switch::before {
+            content: '';
+            position: absolute;
+            height: 24px;
+            width: 24px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            border-radius: 50%;
+            transition: left 0.3s ease;
+        }
+        .toggle-switch.checked {
+            background-color: #27ae60; /* Green when enabled */
+        }
+        .toggle-switch.checked::before {
+            left: calc(100% - 27px);
         }
     `;
     document.head.appendChild(style);
@@ -150,7 +181,8 @@ javascript:(function(){
         <div class="section">
             <h2>Utility Hacks</h2>
             <div>
-                <button id="toggleTeleport">Teleport (Toggle)</button>
+                <label for="toggleTeleport">Teleport</label>
+                <div id="toggleTeleport" class="toggle-switch"></div>
                 <button>Toggle Click Teleporting</button>
                 <button>Edit Walkspeed</button>
                 <button>Reset Account</button>
@@ -181,28 +213,30 @@ javascript:(function(){
         if (menu.classList.contains('hidden')) {
             menu.classList.remove('hidden');
             menu.classList.add('visible');
+            toggle.classList.add('rotated'); // Rotate arrow down
         } else {
             menu.classList.remove('visible');
             menu.classList.add('hiding'); // Trigger slide up animation
             setTimeout(function() {
                 menu.classList.remove('hiding');
                 menu.classList.add('hidden');
+                toggle.classList.remove('rotated'); // Rotate arrow back up
             }, 300); // Same duration as the animation
         }
     };
 
-    // Toggle teleport functionality
+    // Toggle switch for teleport functionality
     var teleportEnabled = false;
-    var toggleTeleportButton = document.getElementById('toggleTeleport');
-    toggleTeleportButton.onclick = function() {
+    var toggleTeleportSwitch = document.getElementById('toggleTeleport');
+    toggleTeleportSwitch.onclick = function() {
         teleportEnabled = !teleportEnabled;
         if (teleportEnabled) {
-            toggleTeleportButton.style.backgroundColor = '#27ae60'; // Green when enabled
-            // Implement your teleport logic here
+            toggleTeleportSwitch.classList.add('checked');
+            // Implement your teleport logic here when enabled
             console.log('Teleport enabled');
         } else {
-            toggleTeleportButton.style.backgroundColor = '#3498db'; // Default blue
-            // Implement logic to disable teleport
+            toggleTeleportSwitch.classList.remove('checked');
+            // Implement your logic to disable teleport
             console.log('Teleport disabled');
         }
     };
