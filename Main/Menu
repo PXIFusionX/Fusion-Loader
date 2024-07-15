@@ -34,7 +34,7 @@ javascript:(async function() {
 
 //Load Cheat Menu *Fetch The Script*
 javascript:(function() {
-    var scriptUrl = 'https://raw.githubusercontent.com/PXIFusionX/PXI-Fusion-X/main/Cheat-Menu/Menu';
+    var scriptUrl = 'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/main/Cheat-Menu/Menu';
     fetch(scriptUrl)
         .then(response => response.text())
         .then(scriptContent => {
