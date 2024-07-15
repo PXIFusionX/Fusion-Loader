@@ -1,7 +1,7 @@
 //Custom Load Screen *Fetch The Script*
 javascript:(async function() {
     var scriptUrls = [
-        'https://github.com/PXIFusionX/Fusion-Loader/blob/main/Custom-Load-Screen/Load%20Screen%20Code',
+        'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/main/Custom-Load-Screen/Load%20Screen%20Code',
         'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/main/Hacks/Selector%20(Advanced)',
         'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/main/Hacks/Teleport-To-World',
         'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/main/Hacks/Permanent-Morph',
