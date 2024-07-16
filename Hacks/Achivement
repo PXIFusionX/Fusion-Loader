@@ -24,6 +24,7 @@
                     closeModal: false,
                 },
                 cancel: "Cancel",
+            },
         }).then(() => {
             callback()
                 .then(() => swal("Success!", "You now have every achievement.", "success"))
