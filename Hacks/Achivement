@@ -1,0 +1,52 @@
+(function() {
+    document.getElementById('getAllAchievements').onclick = async function() {
+    // Function to load SweetAlert if not already loaded
+    function loadSweetAlert(callback) {
+        if (window.swal) {
+            callback();
+        } else {
+            const sweetAlertScript = document.createElement('script');
+            sweetAlertScript.src = 'https://cdn.jsdelivr.net/npm/sweetalert2@10';
+            sweetAlertScript.onload = callback;
+            document.head.appendChild(sweetAlertScript);
+        }
+    }
+
+    // Function to handle granting all achievements
+    function hack(title, description, callback) {
+        swal({
+            title: title,
+            text: description,
+            icon: "warning",
+            buttons: {
+                confirm: {
+                    text: "Get Achievements",
+                    closeModal: false,
+                },
+                cancel: "Cancel",
+        }).then(() => {
+            callback()
+                .then(() => swal("Success!", "You now have every achievement.", "success"))
+                .catch(error => swal("Error", error.message, "error"));
+        });
+    }
+
+    // Command to get all achievements
+    function getachievements() {
+        const player = Boot.prototype.game._state._current.user.source;
+        hack("Get All Achievements", "Gets every achievement.", async () => {
+            for (let i = 0; i < 100; i++) {
+                player.achievements.data.progress[i] = 10;
+            }
+            player.achievements.updated = true;
+            // Replace with your actual success notification function or alert
+            alert("You now have every achievement.");
+        });
+    }
+
+    // Initialize when SweetAlert is loaded
+    loadSweetAlert(function() {
+        getachievements();
+    });
+
+}})();
