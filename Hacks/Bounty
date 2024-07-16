@@ -1,0 +1,58 @@
+(function() {
+    document.getElementById('setBounty').onclick = async function() {
+    // Function to load SweetAlert if not already loaded
+    function loadSweetAlert(callback) {
+        if (window.swal) {
+            callback();
+        } else {
+            const sweetAlertScript = document.createElement('script');
+            sweetAlertScript.src = 'https://cdn.jsdelivr.net/npm/sweetalert2@10';
+            sweetAlertScript.onload = callback;
+            document.head.appendChild(sweetAlertScript);
+        }
+    }
+
+    // Function to handle setting bounty points
+    function hack(title, description, callback) {
+        swal({
+            title: title,
+            text: description,
+            content: {
+                element: "input",
+                attributes: {
+                    type: "number",
+                    min: 1,
+                    max: 100
+                }
+            },
+            buttons: {
+                confirm: {
+                    text: "Set Points",
+                    closeModal: false,
+                },
+                cancel: "Cancel",
+            },
+        }).then(value => {
+            if (!value) return swal("Cancelled", "No points were set.", "error");
+            callback(value)
+                .then(() => swal("Success!", `You now have ${value} bounty points.`, "success"))
+                .catch(error => swal("Error", error.message, "error"));
+        });
+    }
+
+    // Command to set bounty points
+    function setbountypoints() {
+        const player = Boot.prototype.game._state._current.user.source;
+        hack("Set Bounty Points", "Set the amount of bounty points you have currently.", async (value) => {
+            player.data.bountyScore = value;
+            // Replace with your actual success notification function or alert
+            alert(`You now have ${value} bounty points.`);
+        });
+    }
+
+    // Initialize when SweetAlert is loaded
+    loadSweetAlert(function() {
+        setbountypoints();
+    });
+
+}})();
