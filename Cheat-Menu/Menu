@@ -131,11 +131,11 @@ javascript:(function(){
                 <button id="setLevelButton">Set Level</button>
                 <button id="permanentMorphButton">Permanent Morph</button>
                 <button id="uncapLevel">Uncap Level (Client-Side Only)</button>
-                <button>Set Member Stars</button>
-                <button>Set Bounty Points</button>
+                <button id="memberStar">Set Member Stars</button>
+                <button id="setBounty">Set Bounty Points</button>
                 <button>Set Wins</button>
                 <button>Set Losses</button>
-                <button id="getAllAchievementsButton">Get All Achievements</button>
+                <button id="getAllAchievements">Get All Achievements</button>
                 <button>Set Dark Tower Floor</button>
                 <button id="completeQuest">Complete Current Task In Quest</button>
                 <button id="changeNameButton">Change Name</button>
