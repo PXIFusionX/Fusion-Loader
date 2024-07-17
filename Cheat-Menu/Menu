@@ -185,6 +185,7 @@ javascript:(function(){
                 <div id="toggleTeleport" class="toggle-switch"></div>
                 <button>Toggle Click Teleporting</button>
                 <button>Edit Walkspeed</button>
+                <button>Bobbified</button>
                 <button>Reset Account</button>
                 <button id="findUserId">Find the UserId of People on the Screen</button>
                 <button id="duplicateAccountButton">Duplicate an Account</button>
