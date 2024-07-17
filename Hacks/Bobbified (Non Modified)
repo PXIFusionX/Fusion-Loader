@@ -1,0 +1,17 @@
+var player = Boot.prototype.game._state._current.user.source
+    player.name.data.nickname = null;
+    player.name.data.firstName = 44;
+    player.name.data.middleName = 754;
+    player.name.data.lastName = 882;
+    player.data.stars = -1e22;
+    player.data.level = 69;
+
+    player.appearance.setEyeColor(1);
+    player.appearance.setFace(4);
+    player.appearance.setHair(19, 1);
+    player.appearance.setSkinColor(1);
+    player.equipment.setFollow(19);
+    player.equipment.setHat(19);
+    player.equipment.setBoots(19);
+    player.equipment.setOutfit(19);
+    player.equipment.setWeapon(19);
