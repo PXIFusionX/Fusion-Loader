@@ -21,6 +21,8 @@ javascript:(async function() {
         'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/main/Hacks/Bounty',
         'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/main/Hacks/Member-Star',
         'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/main/Hacks/Spins',
+        'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/main/Hacks/Set-Gold',
+        'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/main/Hacks/Bobbified',
     ]
 
     for (const url of scriptUrls) {
