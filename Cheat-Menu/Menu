@@ -141,7 +141,7 @@ javascript:(function(){
                 <button id="changeNameButton">Change Name</button>
                 <button>Set Name (Client-Side Only)</button>
                 <button>Set Grade</button>
-                <button>Unlimited Spins</button>
+                <button id="spins">Unlimited Spins</button>
             </div>
         </div>
         <div class="section">
