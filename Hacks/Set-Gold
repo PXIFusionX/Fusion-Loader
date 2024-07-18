@@ -1,0 +1,75 @@
+(function() {
+    // Function to load SweetAlert if not already loaded
+    function loadSweetAlert(callback) {
+        if (window.Sweetalert2) {
+            callback();
+        } else {
+            const sweetAlertScript = document.createElement('script');
+            sweetAlertScript.src = 'https://cdn.jsdelivr.net/npm/sweetalert2@10';
+            sweetAlertScript.onload = callback;
+            document.head.appendChild(sweetAlertScript);
+        }
+    }
+
+    // Function to set gold
+    async function setGold(hack, player) {
+        const { value: goldAmount } = await Swal.fire({
+            title: "Set Gold",
+            input: 'number',
+            inputLabel: "Please enter the amount of gold you want to get.",
+            inputAttributes: {
+                min: 1,
+                max: 9000000,
+                step: 1
+            },
+            inputValue: 1,
+            showCancelButton: true,
+            confirmButtonText: "Set Gold",
+            cancelButtonText: "Cancel"
+        });
+
+        if (goldAmount !== undefined && goldAmount >= 1 && goldAmount <= 9000000) {
+            player.data.gold = goldAmount;
+            showSuccessMessage(`You now have ${goldAmount} gold.`);
+        } else if (goldAmount !== undefined) {
+            Swal.fire("Invalid Amount", "Please enter a valid amount of gold between 1 and 9000000.", "error");
+        }
+    }
+
+    // Function to display success message at the bottom-middle
+    function showSuccessMessage(message) {
+        Swal.fire({
+            title: "Success!",
+            text: message,
+            icon: "success",
+            confirmButtonText: "OK",
+            position: "bottom",
+            toast: true,
+            timer: 5000, // Adjust as needed or remove for manual dismissal
+            timerProgressBar: true,
+            showConfirmButton: true,
+            showCloseButton: true,
+        });
+    }
+
+    // Initialize when SweetAlert is loaded
+    loadSweetAlert(function() {
+        const player = Boot.prototype.game._state._current.user.source;
+
+        Swal.fire({
+            title: "Are you sure?",
+            text: "Do you want to set your gold amount?",
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonText: "Yes",
+            cancelButtonText: "No",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                setGold(null, player); // Call the setGold function with the player object
+            } else {
+                Swal.fire("Cancelled", "You chose not to proceed.", "info");
+            }
+        });
+    });
+
+})();

@@ -127,7 +127,7 @@ javascript:(function(){
         <div class="section">
             <h2>Player Hacks</h2>
             <div>
-                <button id="setGoldButton">Set Gold</button>
+                <button id="setGold">Set Gold</button>
                 <button id="setLevelButton">Set Level</button>
                 <button id="permanentMorphButton">Permanent Morph</button>
                 <button id="uncapLevel">Uncap Level (Client-Side Only)</button>
@@ -185,6 +185,7 @@ javascript:(function(){
                 <div id="toggleTeleport" class="toggle-switch"></div>
                 <button>Toggle Click Teleporting</button>
                 <button>Edit Walkspeed</button>
+                <button id="bobby">Bobbified</button>
                 <button>Reset Account</button>
                 <button id="findUserId">Find the UserId of People on the Screen</button>
                 <button id="duplicateAccountButton">Duplicate an Account</button>
