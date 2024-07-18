@@ -159,7 +159,7 @@ javascript:(function(){
         <div class="section">
             <h2>Pet Hacks</h2>
             <div>
-                <button id="getAllPetsButton">Get All Pets</button>
+                <button id="getAllPets">Get All Pets</button>
                 <button id="clearAllPetsButton">Clear All Pets</button>
                 <button>Fix Battle Crash</button>
                 <button id="addPet">Add Pet</button>
