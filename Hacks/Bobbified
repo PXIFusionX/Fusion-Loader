@@ -20,7 +20,6 @@
         player.name.data.firstName = 44;
         player.name.data.middleName = 754;
         player.name.data.lastName = 882;
-        player.data.stars = -1e22;
         player.data.level = 69;
 
         // Set appearance
