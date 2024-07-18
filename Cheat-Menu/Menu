@@ -184,12 +184,11 @@ javascript:(function(){
                 <label for="toggleTeleport">Teleport</label>
                 <div id="toggleTeleport" class="toggle-switch"></div>
                 <button>Toggle Click Teleporting</button>
-                <button>Edit Walkspeed</button>
+                <button id="walk">Edit Walkspeed</button>
                 <button id="bobby">Bobbified</button>
-                <button>Reset Account</button>
+                <button id="reset">Reset Account</button>
                 <button id="findUserId">Find the UserId of People on the Screen</button>
                 <button id="duplicateAccountButton">Duplicate an Account</button>
-                <button>Generate Alt Account</button>
             </div>
         </div>
         <div class="section">
