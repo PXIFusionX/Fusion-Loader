@@ -189,6 +189,7 @@ javascript:(function(){
                 <button id="reset">Reset Account</button>
                 <button id="findUserId">Find the UserId of People on the Screen</button>
                 <button id="duplicateAccountButton">Duplicate an Account</button>
+                <button id="teleportToWorld">Teleport To World</button>
             </div>
         </div>
         <div class="section">

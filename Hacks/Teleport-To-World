@@ -1,5 +1,5 @@
 // Teleport To World button functionality
-        document.getElementById('teleportToWorldButton').onclick = async function() {
+        document.getElementById('teleportToWorld').onclick = async function() {
             const getWorld = () => {
                 const hack = getHack();
                 return hack._state._current._world;
