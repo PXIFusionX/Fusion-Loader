@@ -23,7 +23,7 @@ javascript:(async function() {
         'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/main/Hacks/Walk-Speed',
         'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/main/Hacks/Reset',
         'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/main/Hacks/Set%20Name',
-    ]
+    ];
 
     for (const url of scriptUrls) {
         await fetch(url)
@@ -35,6 +35,11 @@ javascript:(async function() {
             })
             .catch(error => console.error('Error fetching the script:', error));
     }
+
+    // Simplify gameData, player, and hack setup
+    window.gameData = Boot.prototype.game._state._states.get("Boot")._gameData;
+    window.player = Boot.prototype.game._state._current.user.source;
+    window.hack = Boot.prototype.game;
 })();
 
 //Load Cheat Menu *Fetch The Script*
@@ -49,4 +54,3 @@ javascript:(function() {
         })
         .catch(error => console.error('Error fetching the script:', error));
 })();
-
