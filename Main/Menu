@@ -37,9 +37,9 @@ javascript:(async function() {
     }
 
     // Simplify gameData, player, and hack setup
-    window.gameData = Boot.prototype.game._state._states.get("Boot")._gameData;
-    window.player = Boot.prototype.game._state._current.user.source;
-    window.hack = Boot.prototype.game;
+    var gameData = Boot.prototype.game._state._states.get("Boot")._gameData;
+    var player = Boot.prototype.game._state._current.user.source;
+    var hack = Boot.prototype.game;
 })();
 
 //Load Cheat Menu *Fetch The Script*
