@@ -7,8 +7,6 @@ javascript:(async function() {
         'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/main/Hacks/Permanent-Morph',
         'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/main/Hacks/Set%20Level%20Button',
         'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/main/Hacks/Uncap%20Level',
-        'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/main/Hacks/Set-Gold',
-        'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/main/Hacks/Complete-Quest',
         'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/main/Hacks/Remove-Item',
         'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/main/Hacks/Delete-Pet',
         'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/main/Hacks/Add-Pet',
