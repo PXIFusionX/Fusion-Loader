@@ -54,5 +54,3 @@ var GameData = Boot.prototype.game._state._states.get("Boot")._gameData;
 
 var player = Boot.prototype.game._state._current.user.source;
 
-var hack = Boot.prototype.game;
-
