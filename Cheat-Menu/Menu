@@ -36,6 +36,9 @@ javascript:(function(){
         #cheatMenu h1 {
             text-align: center;
             color: #333;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
         #cheatMenu .section {
             margin: 20px 0;
@@ -114,6 +117,29 @@ javascript:(function(){
         .toggle-switch.checked::before {
             left: calc(100% - 27px);
         }
+        #announcementButton {
+            padding: 10px;
+            background: linear-gradient(45deg, gold, silver);
+            border: none;
+            color: #000;
+            cursor: pointer;
+            text-align: center;
+            box-sizing: border-box;
+            min-width: 150px;
+            margin: 5px;
+            animation: rotateColors 2s linear infinite;
+        }
+        @keyframes rotateColors {
+            0% {
+                background: linear-gradient(45deg, gold, silver);
+            }
+            50% {
+                background: linear-gradient(45deg, silver, gold);
+            }
+            100% {
+                background: linear-gradient(45deg, gold, silver);
+            }
+        }
     `;
     document.head.appendChild(style);
 
@@ -122,7 +148,10 @@ javascript:(function(){
     menu.id = 'cheatMenu';
     menu.className = 'hidden'; // Initially hidden off-screen
     menu.innerHTML = `
-        <h1>PXI Fusion X Cheat Menu</h1>
+        <h1>
+            PXI Fusion X Cheat Menu
+            <button id="announcementButton">Announcements</button>
+        </h1>
         <p>Join our discord for hack updates & support: discord.gg/YRtWbJrmGa</p>
         <div class="section">
             <h2>Player Hacks</h2>
@@ -272,6 +301,16 @@ javascript:(function(){
                 timerProgressBar: true,
             });
         }
+
+        // Announcements button functionality
+        document.getElementById('announcementButton').onclick = function() {
+            Swal.fire({
+                title: 'Announcements',
+                text: 'New hacks out now!',
+                icon: 'info',
+                confirmButtonText: 'Cool'
+            });
+        };
     };
     document.head.appendChild(script);
 })();
