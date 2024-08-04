@@ -94,7 +94,7 @@
             Swal.fire({
                 icon: "success",
                 title: `${message}`,
-                text: `You have successfully ${message}.`,
+                text: `${message}.`,
                 toast: true,
                 position: 'bottom',
                 showConfirmButton: true
