@@ -117,7 +117,7 @@
             });
         };
 
-        hack("Max Account", "Complete your account.", async (hack, player, gameData) => {
+        hack("Max Account", "Complete your account. *Warning This Hack Takes Up To 1 Minute Due To All The Pets That Our Being Added*", async (hack, player, gameData) => {
             player.data.gold = 9000000;
             player.data.storedMemberStars = 9999999;
             player.data.bountyScore = 100;
