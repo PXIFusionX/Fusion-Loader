@@ -1,9 +1,27 @@
 (function(){
-    document.getElementById('setName').onclick = function() {
-    // Inject SweetAlert Script
+document.getElementById('setName').onclick = function() { 
+// Inject SweetAlert Script Made By PXI
     var script = document.createElement('script');
     script.src = 'https://cdn.jsdelivr.net/npm/sweetalert2@11';
     script.onload = function() {
+        // Ensure the player variable is defined
+        var player;
+        try {
+            player = Boot.prototype.game._state._current.user.source;
+        } catch (e) {
+            console.error("Player object not found.");
+            return;
+        }
+
+        // Ensure gameData is defined
+        var gameData;
+        try {
+            gameData = Boot.prototype.game._state._states.get("Boot")._gameData;
+        } catch (e) {
+            console.error("gameData object not found.");
+            return;
+        }
+
         // Function to create and use the hack
         function hack(name, description, callback) {
             console.log(`Hack: ${name} - ${description}`);
@@ -40,10 +58,9 @@
 
             if (name) {
                 player.appearanceChanged = true;
-                devgameData.name[1209].data.value = name;
-                devgameData.name[1209].data.name = name;
+                gameData.name[1209].data.value = name;
+                gameData.name[1209].data.name = name;
                 player.name.data.firstName = 1237;
-                var player = Boot.prototype.game._state._current.user.source;
                 player.name.data.middleName = null;
                 player.name.data.lastName = null;
                 player.name.data.nickName = null;
@@ -52,4 +69,4 @@
         });
     };
     document.head.appendChild(script);
-}})();
+})();
