@@ -156,6 +156,7 @@
         <div class="section">
             <h2>Player Hacks</h2>
             <div>
+                <button id="max">Max Account</button>
                 <button id="setGold">Set Gold</button>
                 <button id="setLevelButton">Set Level</button>
                 <button id="permanentMorphButton">Permanent Morph</button>
