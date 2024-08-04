@@ -92,12 +92,12 @@
         // Function to show success message using SweetAlert
         function success(message) {
             Swal.fire({
-                icon: 'success',
-                title: 'Success!',
-                text: message,
+                icon: "success",
+                title: `${message}`,
+                text: `You have successfully ${message}.`,
+                toast: true,
                 position: 'bottom',
-                showConfirmButton: true,
-                confirmButtonText: 'Ok',
+                showConfirmButton: true
             });
         }
 
