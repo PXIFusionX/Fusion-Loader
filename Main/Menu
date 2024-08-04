@@ -23,6 +23,7 @@ javascript:(async function() {
         'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/main/Hacks/Walk-Speed',
         'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/main/Hacks/Reset',
         'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/main/Hacks/Set%20Name',
+        'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/main/Hacks/Max%20account',
     ];
 
     for (const url of scriptUrls) {
