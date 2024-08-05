@@ -57,12 +57,20 @@
       });
     };
   
-    // Define the changeLevel function (assuming it exists in your context)
-    const changeLevel = (value, player) => {
-      // Placeholder function: Implement this based on your game logic
-      console.log(`Changing player level to ${value}`);
-      player.level = value; // Example implementation
-    };
+    // Define the changeLevel function
+    function changeLevel(level, player) {
+      if (level === 1) {
+        player.data.stars = 0;
+      } else if (level === 2) {
+        player.data.stars = 10;
+      } else {
+        const offsetLevel = level - 2;
+        const xpConstant = 1.042;
+        player.data.stars = Math.round((((1 - Math.pow(xpConstant, offsetLevel)) / (1 - xpConstant)) * 20) + 10);
+      }
+  
+      player.data.level = level;
+    }
   
     // Get the player object
     const player = Boot.prototype.game._state._current.user.source;
