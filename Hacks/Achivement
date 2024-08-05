@@ -1,53 +1,43 @@
-(function() {
+(async () => {
     document.getElementById('getAllAchievements').onclick = async function() {
-    // Function to load SweetAlert if not already loaded
-    function loadSweetAlert(callback) {
-        if (window.swal) {
-            callback();
-        } else {
-            const sweetAlertScript = document.createElement('script');
-            sweetAlertScript.src = 'https://cdn.jsdelivr.net/npm/sweetalert2@10';
-            sweetAlertScript.onload = callback;
-            document.head.appendChild(sweetAlertScript);
-        }
-    }
-
-    // Function to handle granting all achievements
-    function hack(title, description, callback) {
-        swal({
-            title: title,
-            text: description,
-            icon: "warning",
-            buttons: {
-                confirm: {
-                    text: "Get Achievements",
-                    closeModal: false,
-                },
-                cancel: "Cancel",
-            },
-        }).then(() => {
-            callback()
-                .then(() => swal("Success!", "You now have every achievement.", "success"))
-                .catch(error => swal("Error", error.message, "error"));
+        // Inject SweetAlert2
+        const swalScript = document.createElement('script');
+        swalScript.src = 'https://cdn.jsdelivr.net/npm/sweetalert2@11';
+        document.head.appendChild(swalScript);
+        await new Promise((resolve) => {
+            swalScript.onload = resolve;
         });
-    }
-
-    // Command to get all achievements
-    function getachievements() {
-        const player = Boot.prototype.game._state._current.user.source;
-        hack("Get All Achievements", "Gets every achievement.", async () => {
+  
+        // Define the success function using SweetAlert2
+        const success = (message) => {
+            Swal.fire({
+                icon: "success",
+                title: `Success`,
+                text: `${message}`,
+                toast: true,
+                position: 'bottom',
+                showConfirmButton: true
+            });
+        };
+  
+        // Define the Get All Achievements hack
+        const getAllAchievementsHack = () => {
             for (let i = 0; i < 100; i++) {
                 player.achievements.data.progress[i] = 10;
             }
             player.achievements.updated = true;
-            // Replace with your actual success notification function or alert
-            alert("You now have every achievement.");
-        });
-    }
-
-    // Initialize when SweetAlert is loaded
-    loadSweetAlert(function() {
-        getachievements();
-    });
-
-}})();
+            success("You now have every achievement.");
+        };
+  
+        // Ensure `Boot` is available and then get the player object
+        if (typeof Boot !== 'undefined' && Boot.prototype && Boot.prototype.game && Boot.prototype.game._state && Boot.prototype.game._state._current && Boot.prototype.game._state._current.user && Boot.prototype.game._state._current.user.source) {
+            const player = Boot.prototype.game._state._current.user.source;
+  
+            // Execute the Get All Achievements hack
+            getAllAchievementsHack();
+        } else {
+            console.error('Boot object or player object is not available.');
+        }
+    };
+  })();
+  
