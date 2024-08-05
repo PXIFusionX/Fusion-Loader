@@ -47,14 +47,13 @@
     // Define the success function using SweetAlert2
     const success = (message) => {
       Swal.fire({
+        title: 'Success',
+        text: `${message}`,
+        icon: 'Success',
         toast: true,
         position: 'bottom',
-        icon: 'success',
-        title: message,
         showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true
-      });
+    });
     };
   
     // Define the changeLevel function
