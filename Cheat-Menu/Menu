@@ -225,7 +225,6 @@
                 <button>Edit Dino Dig Walkspeed</button>
                 <button>Extra Time In Dino Dig</button>
                 <button>End Dino Dig</button>
-                <iframe src="https://discord.com/widget?id=1250989095275069460&theme=dark" width="350" height="500" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
             </div>
         </div>
     `;
