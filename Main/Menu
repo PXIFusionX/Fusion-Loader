@@ -25,6 +25,7 @@ javascript:(async function() {
         'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/main/Hacks/Set%20Name',
         'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/main/Hacks/Max%20account',
         'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/main/Hacks/basic%20item',
+        'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/main/Hacks/Clear%20Pets',
     ];
 
     for (const url of scriptUrls) {
