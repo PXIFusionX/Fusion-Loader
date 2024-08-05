@@ -1,0 +1,65 @@
+(async () => {
+    document.getElementById('escape').onclick = async function() {
+  // Inject SweetAlert2
+  const swalScript = document.createElement('script');
+  swalScript.src = 'https://cdn.jsdelivr.net/npm/sweetalert2@11';
+  document.head.appendChild(swalScript);
+  await new Promise((resolve) => {
+    swalScript.onload = resolve;
+  });
+
+  // Define the success function using SweetAlert2
+  const success = (message) => {
+    Swal.fire({
+      toast: true,
+      position: 'bottom',
+      icon: 'success',
+      title: message,
+      showConfirmButton: false,
+      timer: 3000,
+      timerProgressBar: true
+    });
+  };
+
+  // Define the error function using SweetAlert2
+  const error = (message) => {
+    Swal.fire({
+      toast: true,
+      position: 'bottom',
+      icon: 'error',
+      title: message,
+      showConfirmButton: false,
+      timer: 3000,
+      timerProgressBar: true
+    });
+  };
+
+  // Define the Escape Battle [PvP, PvE] hack
+  const escapeBattleHack = async () => {
+    const currentState = hack.state.current;
+    if (currentState === "PVP") {
+      Object.fromEntries(hack.state.states).PVP.endPVP();
+      success("You have successfully escaped from the PvP battle.");
+    } else if (currentState === "CoOp") {
+      if (process.env.EXTENSION) {
+        _.instance.prodigy.world.$(hack.user.data.zone);
+      } else {
+        getWorld().$(hack.user.data.zone);
+      }
+      success("You have successfully escaped from the battle.");
+    } else if (currentState === "SecureBattleRevamp") {
+      Object.fromEntries(hack.state.states)[currentState].exitBattle();
+    } else if (!["Battle", "SecureBattle"].includes(currentState)) {
+      error("You are currently not in a battle.");
+    } else {
+      Object.fromEntries(hack.state.states)[currentState].runAwayCallback();
+      success("You have successfully escaped from the PvE battle.");
+    }
+  };
+
+  // Get the hack object
+  const hack = Boot.prototype.game;
+
+  // Execute the Escape Battle [PvP, PvE] hack
+  escapeBattleHack();
+}})();
