@@ -29,6 +29,7 @@ javascript:(async function() {
         'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/main/Hacks/Dark%20Tower',
         'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/main/Hacks/Change%20Name',
         'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/main/Hacks/Escape%20Battle',
+        'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/main/Hacks/Save%20Inventory',
     ];
 
     for (const url of scriptUrls) {
