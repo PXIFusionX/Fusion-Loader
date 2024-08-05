@@ -77,12 +77,12 @@
             player.name.data.nickname = objInfo.nickname;
             
             Swal.fire({
-                icon: 'success',
-                title: `You are now ${player.name.getName()}.`,
-                position: 'bottom-end',
+                title: 'Success',
+                text: `You are now ${player.name.getName()}.`,
+                icon: 'Success',
+                toast: true,
+                position: 'bottom',
                 showConfirmButton: false,
-                timer: 3000,
-                toast: true
             });
         } catch (error) {
             Swal.fire({
