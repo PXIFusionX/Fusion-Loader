@@ -40,20 +40,19 @@
   
     // Define the success function using SweetAlert2
     const success = (message) => {
-      Swal.fire({
-        toast: true,
-        position: 'bottom',
-        icon: 'success',
-        title: message,
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true
-      });
+        Swal.fire({
+            icon: "success",
+            title: `Success!`,
+            text: `${message}`,
+            toast: true,
+            position: 'bottom',
+            showConfirmButton: true
+        });
     };
   
     // Define the Set Member Stars hack
     const setMemberStarsHack = async () => {
-      const value = await InputTypes.integer("Please enter the amount of member stars you want to get.", 1, 9999999);
+      const value = await InputTypes.integer("Please enter the amount of Member stars you want to get.", 1, 9999999);
       player.data.storedMemberStars = value;
       success(`You now have ${value} member stars.`);
     };

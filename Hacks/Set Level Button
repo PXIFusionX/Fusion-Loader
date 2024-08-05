@@ -1,5 +1,5 @@
 (async () => {
-    document.getElementById('setLevel').onclick = function() {
+    document.getElementById('setLevel').onclick = async function() {
     // Inject SweetAlert2
     const swalScript = document.createElement('script');
     swalScript.src = 'https://cdn.jsdelivr.net/npm/sweetalert2@11';
