@@ -158,7 +158,7 @@
             <div>
                 <button id="max">Max Account</button>
                 <button id="setGold">Set Gold</button>
-                <button id="setLevelButton">Set Level</button>
+                <button id="setLevel">Set Level</button>
                 <button id="permanentMorphButton">Permanent Morph</button>
                 <button id="uncapLevel">Uncap Level (Client-Side Only)</button>
                 <button id="memberStar">Set Member Stars</button>
