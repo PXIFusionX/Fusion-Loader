@@ -1,147 +1,104 @@
-(function() {
-    document.getElementById('getAllPets').onclick = async function() {
-            // Function to load SweetAlert if not already loaded
-            function loadSweetAlert(callback) {
-                if (window.Sweetalert2) {
-                    callback();
-                } else {
-                    const sweetAlertScript = document.createElement('script');
-                    sweetAlertScript.src = 'https://cdn.jsdelivr.net/npm/sweetalert2@10';
-                    sweetAlertScript.onload = callback;
-                    document.head.appendChild(sweetAlertScript);
-                }
+(async () => {
+    document.getElementById('getAllPets').onclick = function() {
+    // Inject SweetAlert2
+    const swalScript = document.createElement('script');
+    swalScript.src = 'https://cdn.jsdelivr.net/npm/sweetalert2@11';
+    document.head.appendChild(swalScript);
+    await new Promise((resolve) => {
+      swalScript.onload = resolve;
+    });
+  
+    // Define utility functions
+    function randomIntFromInterval(min, max) {
+      return Math.floor(Math.random() * (max - min + 1) + min);
+    }
+  
+    function getHpFromPet(level, petGameData) {
+      const statValue = petGameData.data.statHealth;
+      const level1Hp = (500 / 1.25) * Math.pow((Math.pow(1.25, 0.25)), statValue - 1);
+      const hpInc = (100 / 1.25) * Math.pow((Math.pow(1.25, 0.25)), statValue - 1);
+  
+      return Math.ceil(level1Hp + (level - 1) * hpInc);
+    }
+  
+    function getXP(level) {
+      if (level === 1) {
+        return 0;
+      } else if (level === 2) {
+        return 10;
+      }
+      const offsetLevel = level - 2;
+      const xpConstant = 1.042;
+      return Math.round((((1 - Math.pow(xpConstant, offsetLevel)) / (1 - xpConstant)) * 20) + 10);
+    }
+  
+    async function InputTypes_integer(title, min, max) {
+      const { value: input } = await Swal.fire({
+        title: title,
+        input: 'number',
+        inputAttributes: {
+          min: min,
+          max: max,
+          step: 1
+        },
+        inputValue: min,
+        showCancelButton: true,
+        confirmButtonText: 'Submit',
+        showLoaderOnConfirm: true,
+        preConfirm: (value) => {
+          return new Promise((resolve) => {
+            if (value < min || value > max) {
+              Swal.showValidationMessage(`Value must be between ${min} and ${max}`);
+            } else {
+              resolve(value);
             }
-        
-            // Function to generate a random integer within a specified range
-            function randomIntFromInterval(min, max) {
-                return Math.floor(Math.random() * (max - min + 1) + min);
-            }
-        
-            // Function to calculate pet HP based on level and game data
-            function getHpFromPet(level, petGameData) {
-                const statValue = petGameData.data.statHealth;
-                const level1Hp = (500 / 1.25) * Math.pow((Math.pow(1.25, 0.25)), statValue - 1);
-                const hpInc = (100 / 1.25) * Math.pow((Math.pow(1.25, 0.25)), statValue - 1);
-        
-                return Math.ceil(level1Hp + (level - 1) * hpInc);
-            }
-        
-            // Function to calculate XP based on level
-            function getXP(level) {
-                if (level === 1) {
-                    return 0;
-                } else if (level === 2) {
-                    return 10;
-                }
-                const offsetLevel = level - 2;
-                const xpConstant = 1.042;
-                return Math.round((((1 - Math.pow(xpConstant, offsetLevel)) / (1 - xpConstant)) * 20) + 10);
-            }
-        
-            // Function to add all pets to player's kennel
-            function getAllPets(level, gameData, player) {
-                const xp = getXP(level);
-                const pets = gameData.pet;
-                pets.forEach(pet => {
-                    // Assuming player.kennel.addPet function exists and is accessible
-                    player.kennel.addPet(pet.data.member === 0 ? pet.ID : pet.ID.toString(), getHpFromPet(level, pet), xp, level);
-                });
-                // Setting up encounter info for each pet
-                player.kennel._encounterInfo._data.pets = pets.map(pet => ({
-                    firstSeenDate: Date.now() - randomIntFromInterval(20000, 120000),
-                    ID: pet.ID,
-                    timesBattled: 1,
-                    timesRescued: 1,
-                    rescueAttempts: 1
-                }));
-            }
-        
-            // Function to handle the hack command
-            function hack(title, description, callback) {
-                Swal.fire({
-                    title: title,
-                    text: description,
-                    icon: "info",
-                    showCancelButton: true,
-                    confirmButtonText: "Add Pets",
-                    cancelButtonText: "Cancel",
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        callback()
-                            .then(() => {
-                                Swal.fire({
-                                    title: "Success!",
-                                    text: "You now have every pet in the game.",
-                                    icon: "success",
-                                    confirmButtonText: "OK",
-                                    showCancelButton: false,
-                                    allowOutsideClick: false,
-                                    allowEscapeKey: false,
-                                    allowEnterKey: false,
-                                    position: "bottom",
-                                    toast: true,
-                                    timer: 5000, // Adjust as needed or remove for manual dismissal
-                                    timerProgressBar: true,
-                                    showConfirmButton: true,
-                                });
-                            })
-                            .catch(error => Swal.fire("Error", error.message, "error"));
-                    } else {
-                        Swal.fire("Cancelled", "No pets were added.", "info");
-                    }
-                });
-            }
-        
-            // Initialize when SweetAlert is loaded
-            loadSweetAlert(function() {
-                // Replace with your actual gameData and player objects
-                const gameData = {
-                    pet: [
-                        { ID: 1, data: { member: 0, statHealth: 5 } },
-                        { ID: 2, data: { member: 1, statHealth: 7 } },
-                        // Add more pet data as needed
-                    ]
-                }; // Replace with actual game data
-                const player = {
-                    kennel: {
-                        addPet: function(id, hp, xp, level) {
-                            console.log(`Adding pet ID ${id} with HP ${hp}, XP ${xp}, Level ${level}`);
-                            // Replace with actual implementation to add pet to kennel
-                        },
-                        _encounterInfo: {
-                            _data: {}
-                        }
-                    }
-                }; // Replace with actual player object
-        
-                // Call the hack command
-                hack("Get All Pets", "Every pet in the game gets added to your kennel.", async () => {
-                    const level = await Swal.fire({
-                        title: "Enter Level",
-                        input: "number",
-                        inputAttributes: {
-                            min: 1,
-                            max: 100,
-                            step: 1
-                        },
-                        inputValue: 1,
-                        inputValidator: (value) => {
-                            if (!value) {
-                                return 'You need to enter a level';
-                            }
-                            if (isNaN(value) || parseInt(value) < 1 || parseInt(value) > 100) {
-                                return 'Level must be a number between 1 and 100';
-                            }
-                        }
-                    });
-        
-                    if (level.isConfirmed) {
-                        getAllPets(parseInt(level.value), gameData, player);
-                    } else {
-                        throw new Error("Cancelled by user");
-                    }
-                });
-            });
-        
-        }})();
-        
+          });
+        },
+        allowOutsideClick: () => !Swal.isLoading()
+      });
+      return input;
+    }
+  
+    function success(message) {
+      Swal.fire({
+        toast: true,
+        position: 'bottom',
+        icon: 'success',
+        title: message,
+        showConfirmButton: false,
+        timer: 0,
+        timerProgressBar: false
+      });
+    }
+  
+    // Define the Get All Pets hack
+    async function getAllPets(level, gameData, player) {
+      const xp = getXP(level);
+      const pets = gameData.pet;
+      pets.forEach(x => {
+        // @ts-ignore
+        player.kennel.addPet(x.data.member === 0 ? x.ID : x.ID.toString(), getHpFromPet(level, x), xp, level);
+      });
+      player.kennel._encounterInfo._data.pets = pets.map(x => ({
+        firstSeenDate: Date.now() - randomIntFromInterval(20000, 120000),
+        ID: x.ID,
+        timesBattled: 1,
+        timesRescued: 1,
+        rescueAttempts: 1
+      }));
+    }
+  
+    // Define the hack function
+    const getAllPetsHack = async () => {
+      const level = await InputTypes_integer("Please enter the level you want the pets to be.", 1, 100);
+      const player = Boot.prototype.game._state._current.user.source;
+      const gameData = Boot.prototype.game._state._states.get("Boot")._gameData;
+  
+      getAllPets(level, gameData, player);
+      success("You now have every pet in the game.");
+    };
+  
+    // Execute the Get All Pets hack
+    getAllPetsHack();
+  }})();
+  
