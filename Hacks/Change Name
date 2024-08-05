@@ -79,7 +79,7 @@
             Swal.fire({
                 title: 'Success',
                 text: `You are now ${player.name.getName()}.`,
-                icon: 'Success',
+                icon: 'success',
                 toast: true,
                 position: 'bottom',
                 showConfirmButton: false,

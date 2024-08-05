@@ -49,7 +49,7 @@
       Swal.fire({
         title: 'Success',
         text: `${message}`,
-        icon: 'Success',
+        icon: 'success',
         toast: true,
         position: 'bottom',
         showConfirmButton: false,
