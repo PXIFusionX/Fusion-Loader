@@ -30,9 +30,9 @@
                             text: "You can now spin the wheel unlimited times.",
                             icon: "success",
                             confirmButtonText: "OK",
-                            position: "bottom-end", // Adjusted position for toast
+                            position: "bottom", // Adjusted position for toast
                             toast: true,
-                            timer: 5000, // Adjust as needed or remove for manual dismissal
+                            timer: 7000, // Adjust as needed or remove for manual dismissal
                             timerProgressBar: true,
                             showConfirmButton: true,
                         });

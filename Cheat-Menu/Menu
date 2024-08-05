@@ -167,7 +167,7 @@
                 <button id="completeQuest">Complete Current Task In Quest</button>
                 <button id="changeName">Change Name</button>
                 <button id="setName">Set Name (Client-Side Only)</button>
-                <button>Set Grade</button>
+                <button id="setGrade">Set Grade</button>
                 <button id="spins">Unlimited Spins</button>
             </div>
         </div>
