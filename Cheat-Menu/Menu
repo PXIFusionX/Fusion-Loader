@@ -199,7 +199,7 @@
             <h2>Battle Hacks</h2>
             <div>
                 <button>PVP Health</button>
-                <button id = "escape">Escape Battle</button>
+                <button id ="escape">Escape Battle</button>
                 <button>Win Battle [PvE]</button>
                 <button>Fill Battle Energy</button>
                 <button>Heal Team</button>
