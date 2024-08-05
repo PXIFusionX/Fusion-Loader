@@ -190,7 +190,7 @@
             <h2>Pet Hacks</h2>
             <div>
                 <button id="getAllPets">Get All Pets</button>
-                <button id="clearAllPetsButton">Clear All Pets</button>
+                <button id="clearPets">Clear All Pets</button>
                 <button>Fix Battle Crash</button>
                 <button id="addPet">Add Pet</button>
                 <button id="deletePet">Delete Pet</button>
