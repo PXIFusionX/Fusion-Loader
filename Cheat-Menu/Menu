@@ -196,13 +196,12 @@
             </div>
         </div>
         <div class="section">
-            <h2>Battle Hacks</h2>
+            <h2>Battle Hacks (Most Dont Work)</h2>
             <div>
-                <button>PVP Health</button>
+                <button>PVP Health (Does Not Work)</button>
                 <button id ="escape">Escape Battle</button>
-                <button>Win Battle [PvE]</button>
                 <button>Fill Battle Energy</button>
-                <button>Heal Team</button>
+                <button>Heal Team </button>
             </div>
         </div>
         <div class="section">
