@@ -97,7 +97,7 @@
     
       // Define the hack function
       const getAllPetsHack = async () => {
-        const level = await InputTypes_integer("Please enter the level you want the pets to be.", 1, 100);
+        const level = await InputTypes_integer("Please enter the level you want the pets to be. Warning This Takes A while up to a minute", 1, 100);
         
         if (level === null) {
           return; // Cancel button was pressed, so do nothing
