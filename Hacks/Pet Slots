@@ -1,0 +1,58 @@
+(function() {
+    document.getElementById('petSlots').onclick = function() {
+    // Define the player object
+    var player = Boot.prototype.game._state._current.user.source;
+    
+    // Function to load SweetAlert
+    function loadSweetAlert(callback) {
+        if (typeof Swal === 'undefined') {
+            var script = document.createElement('script');
+            script.src = 'https://cdn.jsdelivr.net/npm/sweetalert2@11';
+            script.onload = callback;
+            document.head.appendChild(script);
+        } else {
+            callback();
+        }
+    }
+
+    // Function to display SweetAlert input prompt
+    function showInputPrompt() {
+        Swal.fire({
+            title: 'How Many Pet Slots Do You Want?',
+            input: 'number',
+            inputAttributes: {
+                min: 1,
+                max: 1000,
+                step: 1
+            },
+            inputValue: 1,
+            showCancelButton: true,
+            confirmButtonText: 'Submit',
+            preConfirm: (value) => {
+                return new Promise((resolve) => {
+                    if (value >= 1 && value <= 1000) {
+                        resolve(value);
+                    } else {
+                        Swal.showValidationMessage('Please enter a number between 1 and 1000');
+                    }
+                });
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Modify pet slots
+                player.kennel.modifyPetSlots(result.value);
+                // Show success message
+                Swal.fire({
+                    position: 'bottom',
+                    icon: 'success',
+                    title: 'Pet slots modified successfully!',
+                    showConfirmButton: true,
+                    toast: true
+                });
+            }
+        });
+    }
+
+    // Load SweetAlert and show the input prompt
+    loadSweetAlert(showInputPrompt);
+}})();
