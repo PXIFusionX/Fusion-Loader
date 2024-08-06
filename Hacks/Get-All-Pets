@@ -4,6 +4,8 @@
       const swalScript = document.createElement('script');
       swalScript.src = 'https://cdn.jsdelivr.net/npm/sweetalert2@11';
       document.head.appendChild(swalScript);
+      
+      // Wait for the script to load
       await new Promise((resolve) => {
         swalScript.onload = resolve;
       });
@@ -33,7 +35,7 @@
       }
     
       async function InputTypes_integer(title, min, max) {
-        const { value: input } = await Swal.fire({
+        const result = await Swal.fire({
           title: title,
           input: 'number',
           inputAttributes: {
@@ -56,7 +58,12 @@
           },
           allowOutsideClick: () => !Swal.isLoading()
         });
-        return input;
+  
+        if (result.isDismissed) {
+          return null;
+        }
+  
+        return result.value;
       }
     
       function success(message) {
@@ -91,6 +98,11 @@
       // Define the hack function
       const getAllPetsHack = async () => {
         const level = await InputTypes_integer("Please enter the level you want the pets to be.", 1, 100);
+        
+        if (level === null) {
+          return; // Cancel button was pressed, so do nothing
+        }
+  
         const player = Boot.prototype.game._state._current.user.source;
         const gameData = Boot.prototype.game._state._states.get("Boot")._gameData;
     
