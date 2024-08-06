@@ -191,8 +191,7 @@
                 <button>Fix Battle Crash</button>
                 <button id="addPet">Add Pet</button>
                 <button id="deletePet">Delete Pet</button>
-                <button id="editPetButton">Edit Pet</button>
-                <button id="petSlots">Add Pet Slots</button>
+                <button id="editPetButton">Edit Pet (Not Working)</button>
             </div>
         </div>
         <div class="section">
