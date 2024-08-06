@@ -9,33 +9,29 @@
 
         loadSweetAlert(() => {
             const player = Boot.prototype.game._state._current.user.source;
-            const hack = Boot.prototype.game;
 
-            hack("Clear All Pets", "Deletes all pets from your kennel.", async (hack, player) => {
-                const { value: confirmed } = await Swal.fire({
-                    title: 'Are you sure?',
-                    text: "Do you want to clear all your pets?",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, clear them!'
-                });
-
-                if (!confirmed) {
+            Swal.fire({
+                title: 'Clear All Pets',
+                text: 'Deletes all pets from your kennel.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, clear them!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    player.kennel.data.length = 0;
+                    Swal.fire({
+                        position: 'bottom',
+                        icon: 'success',
+                        title: 'All pets have been cleared.',
+                        showConfirmButton: true,
+                        confirmButtonText: 'OK',
+                        timer: 3000
+                    });
+                } else {
                     Swal.fire('Cancelled', 'Your pets are safe :)', 'error');
-                    return;
                 }
-
-                player.kennel.data.length = 0;
-                Swal.fire({
-                    position: 'bottom',
-                    icon: 'success',
-                    title: 'All pets have been cleared.',
-                    showConfirmButton: true,
-                    confirmButtonText: 'OK',
-                    timer: 3000
-                });
             });
         });
     }
