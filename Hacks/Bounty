@@ -1,5 +1,5 @@
 (async () => {
-    document.getElementById('setBounty').onclick = async function() {
+  document.getElementById('setBounty').onclick = async function() {
     // Inject SweetAlert2
     const swalScript = document.createElement('script');
     swalScript.src = 'https://cdn.jsdelivr.net/npm/sweetalert2@11';
@@ -7,11 +7,11 @@
     await new Promise((resolve) => {
       swalScript.onload = resolve;
     });
-  
+
     // Define the InputTypes.integer function using SweetAlert2
     const InputTypes = {
       integer: async (title, min, max) => {
-        const { value: input } = await Swal.fire({
+        const { value: input, isConfirmed } = await Swal.fire({
           title: title,
           input: 'number',
           inputAttributes: {
@@ -34,10 +34,14 @@
           },
           allowOutsideClick: () => !Swal.isLoading()
         });
-        return input;
+        if (isConfirmed) {
+          return input;
+        } else {
+          return null;
+        }
       }
     };
-  
+
     // Define the success function using SweetAlert2
     const success = (message) => {
       Swal.fire({
@@ -50,18 +54,20 @@
         timerProgressBar: true
       });
     };
-  
+
     // Define the Set Bounty Points hack
     const setBountyPointsHack = async () => {
       const value = await InputTypes.integer("Please enter the amount of Bounty points you want to get.", 1, 100);
-      player.data.bountyScore = value;
-      success(`You now have ${value} bounty points.`);
+      if (value !== null) {
+        player.data.bountyScore = value;
+        success(`You now have ${value} bounty points.`);
+      }
     };
-  
+
     // Get the player object
     const player = Boot.prototype.game._state._current.user.source;
-  
+
     // Execute the Set Bounty Points hack
     setBountyPointsHack();
-  }})();
-  
+  };
+})();
