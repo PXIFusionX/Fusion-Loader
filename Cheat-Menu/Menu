@@ -192,7 +192,7 @@
                 <button id="addPet">Add Pet</button>
                 <button id="deletePet">Delete Pet</button>
                 <button id="editPetButton">Edit Pet</button>
-                <button id="addPetslots">Add Pet Slots</button>
+                <button id="petSlots">Add Pet Slots</button>
             </div>
         </div>
         <div class="section">
