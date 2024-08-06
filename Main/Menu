@@ -31,6 +31,7 @@ javascript:(async function() {
         'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/main/Hacks/Escape%20Battle',
         'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/main/Hacks/Save%20Inventory',
         'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/main/Hacks/Set%20Grade',
+        'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/main/Hacks/Pet%20Slots',
     ];
 
     for (const url of scriptUrls) {
