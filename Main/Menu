@@ -33,6 +33,9 @@ javascript:(async function() {
         'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/main/Hacks/Set%20Grade',
         'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/main/Hacks/Pet%20Slots',
         'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/main/Hacks/Complete%20Quest',
+        'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/main/Hacks/Dino%20100%20Days',
+        'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/main/Hacks/Dino%20Walk%20Speed',
+        'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/main/Hacks/End%20Dino%20Dig',
     ];
 
     for (const url of scriptUrls) {
