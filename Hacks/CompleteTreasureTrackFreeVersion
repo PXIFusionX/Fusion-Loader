@@ -1,0 +1,10 @@
+Boot.prototype.game._state._current._battlePassDataPromise.then(data => {
+    console.log(data); // or any other operations you want to perform with the data
+    Object.keys(data._tiers).forEach(tier => {
+        data._tiers[tier].isCompleted = true;
+        data._tiers[tier].freeReward.claimed = false;
+        data._tiers[tier].freeReward.claimable = true;
+    });
+}).catch(error => {
+    console.error('Error fetching battle pass data:', error);
+});
