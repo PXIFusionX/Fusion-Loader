@@ -1,0 +1,8 @@
+Boot.prototype.game._state._current._battleController._activeUnit._data.health.max = 1000000000;
+Boot.prototype.game._state._current._battleController._activeUnit._data.health.current = 1000000000;
+Boot.prototype.game._state._current._battleController._activeUnit.updateHp(Boot.prototype.game._state._current._battleController._activeUnit._data.health.current, Boot.prototype.game._state._current._battleController._activeUnit._data.health.max, Boot.prototype.game._state._current._battleController._activeUnit._hpBar._progressBar._fillValue);
+
+
+Boot.prototype.game._state._current._battleController.leftTeam.wizard._hpBar._progressBar._fillValue = 1;
+Boot.prototype.game._state._current._battleController.leftTeam.wizard.updateHp(Boot.prototype.game._state._current._battleController.leftTeam.wizard.currentHp, Boot.prototype.game._state._current._battleController.leftTeam.wizard.maxHp, Boot.prototype.game._state._current._battleController.leftTeam.wizard._hpBar._progressBar._fillValue, Boot.prototype.game._state._current._battleController.leftTeam.wizard.data.health.current, Boot.prototype.game._state._current._battleController.leftTeam.wizard.data.health.max);
+Boot.prototype.game._state._current._battleController.leftTeam.wizard.update()
