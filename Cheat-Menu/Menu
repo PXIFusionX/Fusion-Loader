@@ -148,10 +148,18 @@
     menu.id = 'cheatMenu';
     menu.className = 'hidden'; // Initially hidden off-screen
     menu.innerHTML = `
-        <h1>
-            PXI Fusion X Cheat Menu
-            <button id="announcementButton">Announcements</button>
-        </h1>
+    <h1>
+        PXI Fusion X Cheat Menu
+        <div class="icons">
+            <a href="https://discord.gg/VAkGbXKwhY" target="_blank">
+                <img src="https://cdn.prod.website-files.com/6257adef93867e50d84d30e2/636e0a6a49cf127bf92de1e2_icon_clyde_blurple_RGB.png" alt="Discord Icon">
+            </a>
+            <a href="https://www.youtube.com/@PXIFusionX" target="_blank">
+                <img src="https://cdn3.iconfinder.com/data/icons/social-network-30/512/social-06-512.png" alt="YouTube Icon">
+            </a>
+        </div>
+        <button id="announcementButton">Announcements</button>
+    </h1>
         <p>Join our discord for hack updates & support: discord.gg/YRtWbJrmGa</p>
         <div class="section">
             <h2>Player Hacks</h2>
