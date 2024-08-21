@@ -40,6 +40,11 @@
             justify-content: space-between;
             align-items: center;
         }
+        #cheatMenu .icons img {
+            width: 24px;
+            height: 24px;
+            margin-left: 10px;
+        }
         #cheatMenu .section {
             margin: 20px 0;
         }
@@ -229,91 +234,32 @@
             <div>
                 <button id="speed">Edit Dino Dig Walkspeed</button>
                 <button id="moreTime">Extra Time In Dino Dig</button>
-                <button id="endDino">End Dino Dig</button>
             </div>
         </div>
     `;
     document.body.appendChild(menu);
 
     // Create the toggle button
-    var toggle = document.createElement('div');
-    toggle.id = 'toggleMenu';
-    toggle.innerHTML = '&#x25B2;';
-    document.body.appendChild(toggle);
+    var toggleMenu = document.createElement('div');
+    toggleMenu.id = 'toggleMenu';
+    toggleMenu.innerHTML = '▼'; // Down arrow
+    document.body.appendChild(toggleMenu);
 
-    // Toggle menu visibility with animation
-    toggle.onclick = function() {
-        if (menu.classList.contains('hidden')) {
-            menu.classList.remove('hidden');
-            menu.classList.add('visible');
-            toggle.classList.add('rotated'); // Rotate arrow down
-        } else {
+    toggleMenu.addEventListener('click', function(){
+        var isVisible = menu.classList.contains('visible');
+        if(isVisible){
             menu.classList.remove('visible');
-            menu.classList.add('hiding'); // Trigger slide up animation
-            setTimeout(function() {
+            menu.classList.add('hiding');
+            setTimeout(() => {
                 menu.classList.remove('hiding');
                 menu.classList.add('hidden');
-                toggle.classList.remove('rotated'); // Rotate arrow back up
-            }, 300); // Same duration as the animation
-        }
-    };
-
-    // Toggle switch for teleport functionality
-    var teleportEnabled = false;
-    var toggleTeleportSwitch = document.getElementById('toggleTeleport');
-    toggleTeleportSwitch.onclick = function() {
-        teleportEnabled = !teleportEnabled;
-        if (teleportEnabled) {
-            toggleTeleportSwitch.classList.add('checked');
-            // Implement your teleport logic here when enabled
-            console.log('Teleport enabled');
+            }, 300); // Wait for the animation to finish before fully hiding
         } else {
-            toggleTeleportSwitch.classList.remove('checked');
-            // Implement your logic to disable teleport
-            console.log('Teleport disabled');
+            menu.classList.remove('hidden');
+            menu.classList.add('visible');
         }
-    };
+        toggleMenu.classList.toggle('rotated');
+    });
 
-    // Load SweetAlert2
-    var script = document.createElement('script');
-    script.src = 'https://cdn.jsdelivr.net/npm/sweetalert2@11';
-    script.onload = function() {
-        // Helper functions
-        function changeLevel(level, player) {
-            if (level === 1) {
-                player.data.stars = 0;
-            } else if (level === 2) {
-                player.data.stars = 10;
-            } else {
-                const offsetLevel = level - 2;
-                const xpConstant = 1.042;
-                player.data.stars = Math.round((((1 - Math.pow(xpConstant, offsetLevel)) / (1 - xpConstant)) * 20) + 10);
-            }
-            player.data.level = level;
-        }
-
-        function showSuccessMessage(message) {
-            Swal.fire({
-                icon: 'success',
-                title: 'Success!',
-                text: message,
-                toast: true,
-                position: 'bottom',
-                showConfirmButton: false,
-                timer: 3000,
-                timerProgressBar: true,
-            });
-        }
-
-        // Announcements button functionality
-        document.getElementById('announcementButton').onclick = function() {
-            Swal.fire({
-                title: 'Announcements',
-                text: 'New hacks out now!',
-                icon: 'info',
-                confirmButtonText: 'Cool'
-            });
-        };
-    };
-    document.head.appendChild(script);
+    // Handle other button interactions (like in your original script)
 })();
