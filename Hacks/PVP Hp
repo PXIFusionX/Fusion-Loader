@@ -1,5 +1,5 @@
 (function(){
-    document.getElementById('pvpHealth').onclick = async function() {
+    //document.getElementById('pvpHealth').onclick = async function() {
     // Define the battle controller
     var battle = Boot.prototype.game._state._current._battleController;
 
@@ -15,11 +15,11 @@
         Swal.fire({
             icon: "success",
             title: `Health Set to 100000000`,
-            text: `You can now fight with unlimited health!`,,
+            text: `You can now fight with unlimited health!`
             toast: true,
             position: 'bottom',
             showConfirmButton: true
         });
     };
     document.head.appendChild(script);
-}})();
+})();
