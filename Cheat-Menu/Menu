@@ -40,11 +40,6 @@
             justify-content: space-between;
             align-items: center;
         }
-        #cheatMenu .icons img {
-            width: 24px;
-            height: 24px;
-            margin-left: 10px;
-        }
         #cheatMenu .section {
             margin: 20px 0;
         }
@@ -145,6 +140,11 @@
                 background: linear-gradient(45deg, silver, gold);
             }
         }
+        #cheatMenu .icons img {
+            width: 24px;
+            height: 24px;
+            margin-left: 10px;
+        }
     `;
     document.head.appendChild(style);
 
@@ -237,26 +237,89 @@
     document.body.appendChild(menu);
 
     // Create the toggle button
-    var toggleMenu = document.createElement('div');
-    toggleMenu.id = 'toggleMenu';
-    toggleMenu.innerHTML = '▼'; // Down arrow
-    document.body.appendChild(toggleMenu);
+    var toggleMenuButton = document.createElement('div');
+    toggleMenuButton.id = 'toggleMenu';
+    toggleMenuButton.innerHTML = '&#9660;'; // Down arrow
+    document.body.appendChild(toggleMenuButton);
 
-    toggleMenu.addEventListener('click', function(){
-        var isVisible = menu.classList.contains('visible');
-        if(isVisible){
+    // Inject SweetAlert2 if not already present
+    if (typeof Swal === 'undefined') {
+        var sweetAlertScript = document.createElement('script');
+        sweetAlertScript.src = 'https://cdn.jsdelivr.net/npm/sweetalert2@11';
+        document.head.appendChild(sweetAlertScript);
+    }
+
+    // SweetAlert wrapper function for success messages
+    function success(message) {
+        Swal.fire({
+            icon: 'success',
+            title: 'Success!',
+            text: message,
+            toast: true,
+            position: 'bottom',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+        });
+    }
+
+    // Show the cheat menu
+    function showMenu() {
+        menu.classList.remove('hidden');
+        menu.classList.add('visible');
+    }
+
+    // Hide the cheat menu
+    function hideMenu() {
+        menu.classList.add('hiding');
+        setTimeout(() => {
             menu.classList.remove('visible');
-            menu.classList.add('hiding');
-            setTimeout(() => {
-                menu.classList.remove('hiding');
-                menu.classList.add('hidden');
-            }, 300); // Wait for the animation to finish before fully hiding
+            menu.classList.add('hidden');
+            menu.classList.remove('hiding');
+        }, 300); // Match the animation duration
+    }
+
+    // Toggle the menu when the button is clicked
+    toggleMenuButton.addEventListener('click', () => {
+        toggleMenuButton.classList.toggle('rotated'); // Rotate the arrow
+        if (menu.classList.contains('visible')) {
+            hideMenu();
         } else {
-            menu.classList.remove('hidden');
-            menu.classList.add('visible');
+            showMenu();
         }
-        toggleMenu.classList.toggle('rotated');
     });
 
-    // Handle other button interactions (like in your original script)
+    // Toggle Click Teleporting
+    let teleportingInterval;
+    let player = Boot.prototype.game._state._current.user.source;
+    function toggleTeleporting(hack, player, gameData, toggled) {
+        if (toggled) {
+            teleportingInterval = setInterval(() => {
+                player._playerContainer.walkSpeed = 500;
+            }, 100);
+            success("You will now teleport when you click the screen.");
+        } else {
+            clearInterval(teleportingInterval);
+            player._playerContainer.walkSpeed = 1.5;
+            success("You will no longer teleport when you click the screen.");
+        }
+    }
+
+    // Initialize toggle switch
+    const teleportToggleSwitch = document.getElementById('toggleTeleport');
+    let isTeleportEnabled = false;
+
+    teleportToggleSwitch.addEventListener('click', function() {
+        isTeleportEnabled = !isTeleportEnabled;
+        teleportToggleSwitch.classList.toggle('checked', isTeleportEnabled);
+        toggleTeleporting('Toggle Click Teleporting', player, null, isTeleportEnabled);
+    });
+
+    // Example of setting up one of the button functions
+    document.getElementById('max').addEventListener('click', () => {
+        player.maxOut();
+        success('Maxed out your account!');
+    });
+
+    // Additional SweetAlert prompts can be added similarly
 })();
