@@ -37,6 +37,7 @@ javascript:(async function() {
         'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/main/Hacks/Dino%20Walk%20Speed',
         'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/main/Hacks/Duplicate%20Acc',
         'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/main/Hacks/Set%20Gold',
+        'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/main/Hacks/End%20Dino',
     ];
 
     for (const url of scriptUrls) {
