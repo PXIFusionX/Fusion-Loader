@@ -201,10 +201,8 @@
             <div>
                 <button id="getAllPets">Get All Pets</button>
                 <button id="clearPets">Clear All Pets</button>
-                <button>Fix Battle Crash</button>
                 <button id="addPet">Add Pet</button>
                 <button id="deletePet">Delete Pet</button>
-                <button id="editPetButton">Edit Pet (Not Working)</button>
             </div>
         </div>
         <div class="section">
@@ -231,6 +229,7 @@
             <div>
                 <button id="speed">Edit Dino Dig Walkspeed</button>
                 <button id="moreTime">Extra Time In Dino Dig</button>
+                <button id="endDino">End Dino Dig</button>
             </div>
         </div>
     `;
@@ -313,12 +312,6 @@
         isTeleportEnabled = !isTeleportEnabled;
         teleportToggleSwitch.classList.toggle('checked', isTeleportEnabled);
         toggleTeleporting('Toggle Click Teleporting', player, null, isTeleportEnabled);
-    });
-
-    // Example of setting up one of the button functions
-    document.getElementById('max').addEventListener('click', () => {
-        player.maxOut();
-        success('Maxed out your account!');
     });
 
     // Additional SweetAlert prompts can be added similarly
