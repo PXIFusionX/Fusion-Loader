@@ -209,6 +209,7 @@
             <h2>Battle Hacks (More coming soon)</h2>
             <div>
                 <button id ="escape">Escape Battle</button>
+                <button id ="pvpHealth">PVP Health</button>
             </div>
         </div>
         <div class="section">
