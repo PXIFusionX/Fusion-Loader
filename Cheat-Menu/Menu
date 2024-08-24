@@ -203,6 +203,7 @@
                 <button id="clearPets">Clear All Pets</button>
                 <button id="addPet">Add Pet</button>
                 <button id="deletePet">Delete Pet</button>
+                <button id="editPet">Edit Pet</button>
             </div>
         </div>
         <div class="section">
