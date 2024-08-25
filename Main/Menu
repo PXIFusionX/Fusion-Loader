@@ -40,6 +40,7 @@ javascript:(async function() {
         'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/main/Hacks/End%20Dino',
         'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/main/Hacks/PVP%20Hp',
         'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/234f8994ad5c287d98eb4142bf48ee4110fabe3a/Hacks/Edit%20pet',
+        'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/main/Hacks/Save%20pet%20data',
     ];
 
     for (const url of scriptUrls) {
