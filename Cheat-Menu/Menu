@@ -204,6 +204,8 @@
                 <button id="addPet">Add Pet</button>
                 <button id="deletePet">Delete Pet</button>
                 <button id="editPet">Edit Pet</button>
+                <button id="savePet">Save Pet Data</button>
+
             </div>
         </div>
         <div class="section">
