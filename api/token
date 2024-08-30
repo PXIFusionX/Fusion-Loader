@@ -1,0 +1,64 @@
+(function() {
+  // Check if the PXI Token already exists in local storage
+  const tokenKey = 'PXI Token';
+  let pxiToken = localStorage.getItem(tokenKey);
+
+  // If the token is found, exit the script
+  if (pxiToken) {
+    console.log('Token found, no action needed.');
+    return;
+  }
+
+  // Load Firebase SDK from an older CDN
+  const firebaseScript = document.createElement('script');
+  firebaseScript.src = 'https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js'; // Use version 8.x for compatibility
+  firebaseScript.onload = () => {
+    const firestoreScript = document.createElement('script');
+    firestoreScript.src = 'https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js'; // Use version 8.x for compatibility
+    firestoreScript.onload = initializeFirebase;
+    document.head.appendChild(firestoreScript);
+  };
+  document.head.appendChild(firebaseScript);
+
+  function initializeFirebase() {
+    // Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyCD4OWZg0q292UKFxt3kCBVRk6bLOKoKds",
+      authDomain: "pxi-fusion-bot.firebaseapp.com",
+      projectId: "pxi-fusion-bot",
+      storageBucket: "pxi-fusion-bot.appspot.com",
+      messagingSenderId: "873658449487",
+      appId: "1:873658449487:web:1bb067a9d37b37f0aab43a"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    // Generate a 20-character token
+    const newToken = generateToken(20);
+
+    // Create a new document in the 'Users' collection with the generated token
+    db.collection('Users').doc(newToken).set({
+      Beta: 0,
+      Premium: 0
+    }).then(() => {
+      console.log('Token created and saved in Firestore');
+      // Save the token in local storage
+      localStorage.setItem(tokenKey, newToken);
+      console.log('Token saved in local storage');
+    }).catch((error) => {
+      console.error('Error adding token to Firestore:', error);
+    });
+  }
+
+  // Function to generate a random token of specified length
+  function generateToken(length) {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let result = '';
+    for (let i = 0; i < length; i++) {
+      result += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+    return result;
+  }
+})();
