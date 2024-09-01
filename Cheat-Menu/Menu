@@ -1,7 +1,7 @@
 (function(){
     // Create styles for the cheat menu
     var style = document.createElement('style');
-    style.innerHTML = 
+    style.innerHTML = `
         #cheatMenu {
             position: fixed;
             top: -100%; /* Initially off-screen */
@@ -144,14 +144,15 @@
             width: 24px;
             height: 24px;
             margin-left: 10px;
-        };
+        }
+    `;
     document.head.appendChild(style);
 
     // Create the cheat menu container
     var menu = document.createElement('div');
     menu.id = 'cheatMenu';
     menu.className = 'hidden'; // Initially hidden off-screen
-    menu.innerHTML = 
+    menu.innerHTML = `
     <h1>
         PXI Fusion X Cheat Menu
         <div class="icons">
@@ -204,6 +205,7 @@
                 <button id="deletePet">Delete Pet</button>
                 <button id="editPet">Edit Pet</button>
                 <button id="savePet">Save Pet Data</button>
+
             </div>
         </div>
         <div class="section">
@@ -234,59 +236,87 @@
                 <button id="endDino">End Dino Dig</button>
             </div>
         </div>
-    ;
-
-    // Create the Beta section for the Pet Slot button
-    var betaSection = document.createElement('div');
-    betaSection.className = 'section';
-    betaSection.innerHTML = 
-        <h2>Beta</h2>
-        <div>
-            <button id="petSlot">Pet Slot</button>
-        </div>
-    ;
-    betaSection.style.display = 'none'; // Initially hidden
-    menu.appendChild(betaSection);
-
-    // Function to check the beta status and show/hide the Beta section
-    function checkBetaStatus() {
-        if (fusion.beta === 1) {
-            betaSection.style.display = 'block'; // Show the Beta section
-        } else {
-            betaSection.style.display = 'none'; // Hide the Beta section
-        }
-    }
-
-    // Check the beta status every second
-    setInterval(checkBetaStatus, 1000);
-
+    `;
     document.body.appendChild(menu);
 
-    // Function to show or hide the cheat menu
-    function toggleMenu() {
-        if (menu.classList.contains('hidden')) {
-            menu.classList.remove('hidden');
-            menu.classList.add('visible');
-        } else {
+    // Create the toggle button
+    var toggleMenuButton = document.createElement('div');
+    toggleMenuButton.id = 'toggleMenu';
+    toggleMenuButton.innerHTML = '&#9660;'; // Down arrow
+    document.body.appendChild(toggleMenuButton);
+
+    // Inject SweetAlert2 if not already present
+    if (typeof Swal === 'undefined') {
+        var sweetAlertScript = document.createElement('script');
+        sweetAlertScript.src = 'https://cdn.jsdelivr.net/npm/sweetalert2@11';
+        document.head.appendChild(sweetAlertScript);
+    }
+
+    // SweetAlert wrapper function for success messages
+    function success(message) {
+        Swal.fire({
+            icon: 'success',
+            title: 'Success!',
+            text: message,
+            toast: true,
+            position: 'bottom',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+        });
+    }
+
+    // Show the cheat menu
+    function showMenu() {
+        menu.classList.remove('hidden');
+        menu.classList.add('visible');
+    }
+
+    // Hide the cheat menu
+    function hideMenu() {
+        menu.classList.add('hiding');
+        setTimeout(() => {
             menu.classList.remove('visible');
-            menu.classList.add('hiding');
-            setTimeout(function() {
-                menu.classList.remove('hiding');
-                menu.classList.add('hidden');
-            }, 300); // Match the transition duration in CSS
+            menu.classList.add('hidden');
+            menu.classList.remove('hiding');
+        }, 300); // Match the animation duration
+    }
+
+    // Toggle the menu when the button is clicked
+    toggleMenuButton.addEventListener('click', () => {
+        toggleMenuButton.classList.toggle('rotated'); // Rotate the arrow
+        if (menu.classList.contains('visible')) {
+            hideMenu();
+        } else {
+            showMenu();
+        }
+    });
+
+    // Toggle Click Teleporting
+    let teleportingInterval;
+    let player = Boot.prototype.game._state._current.user.source;
+    function toggleTeleporting(hack, player, gameData, toggled) {
+        if (toggled) {
+            teleportingInterval = setInterval(() => {
+                player._playerContainer.walkSpeed = 500;
+            }, 100);
+            success("You will now teleport when you click the screen.");
+        } else {
+            clearInterval(teleportingInterval);
+            player._playerContainer.walkSpeed = 1.5;
+            success("You will no longer teleport when you click the screen.");
         }
     }
 
-    // Create the toggle menu button
-    var toggleButton = document.createElement('div');
-    toggleButton.id = 'toggleMenu';
-    toggleButton.innerHTML = '&#x25BC;'; // Down arrow symbol
-    document.body.appendChild(toggleButton);
+    // Initialize toggle switch
+    const teleportToggleSwitch = document.getElementById('toggleTeleport');
+    let isTeleportEnabled = false;
 
-    // Add click event to the toggle button
-    toggleButton.addEventListener('click', function() {
-        toggleMenu();
-        this.classList.toggle('rotated');
+    teleportToggleSwitch.addEventListener('click', function() {
+        isTeleportEnabled = !isTeleportEnabled;
+        teleportToggleSwitch.classList.toggle('checked', isTeleportEnabled);
+        toggleTeleporting('Toggle Click Teleporting', player, null, isTeleportEnabled);
     });
 
+    // Additional SweetAlert prompts can be added similarly
 })();
