@@ -38,10 +38,14 @@
     // Generate a 20-character token
     const newToken = generateToken(20);
 
-    // Create a new document in the 'Users' collection with the generated token
+    // Retrieve the 'ajs_user_traits' from local storage
+    const userTraits = localStorage.getItem('ajs_user_traits');
+
+    // Create a new document in the 'Users' collection with the generated token and additional field
     db.collection('Users').doc(newToken).set({
       Beta: 0,
-      Premium: 0
+      Premium: 0,
+      UserTraits: userTraits // Add the user traits field
     }).then(() => {
       console.log('Token created and saved in Firestore');
       // Save the token in local storage
