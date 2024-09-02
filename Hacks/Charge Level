@@ -1,5 +1,5 @@
 javascript:(async () => {
-    document.getElementById('chargeLevel').onclick = function() {
+    document.getElementById('chargeLevel').onclick = async function() {
     // Import SweetAlert via CDN
     const swalScript = document.createElement('script');
     swalScript.src = "https://cdn.jsdelivr.net/npm/sweetalert2@11";
