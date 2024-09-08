@@ -43,6 +43,7 @@ javascript:(async function() {
         'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/main/Hacks/Save%20pet%20data',
         'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/main/Hacks/Kick%20Player%20',
         'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/main/Hacks/Charge%20Level',
+        'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/main/Main/addFusion',
     ];
 
     for (const url of scriptUrls) {
