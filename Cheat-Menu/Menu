@@ -144,14 +144,6 @@
             width: 24px;
             height: 24px;
             margin-left: 10px;
-        }/* CSS for shake animation */
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            75% { transform: translateX(5px); }
-        }
-        .shake {
-            animation: shake 0.5s ease-in-out;
         }
     `;
     document.head.appendChild(style);
@@ -243,102 +235,9 @@
                 <button id="moreTime">Extra Time In Dino Dig</button>
                 <button id="endDino">End Dino Dig</button>
             </div>
-        </div>`;
-
-    // Create the Beta section and the Pet Slot button
-    var betaSection = document.createElement('div');
-    betaSection.className = 'section';
-    betaSection.innerHTML = `
-        <h2>Upcoming Updates</h2>
-        <div>
-            <button id="chargeLevel">Set Charge Level</button>
-            <button id="kickPlayer">Kick Player (Not Serverside)</button>
         </div>
     `;
-    betaSection.style.display = 'none'; // Initially hidden
-    menu.appendChild(betaSection);
-
-    // Function to check the beta status and show/hide the Beta section
-    function checkBetaStatus() {
-        if (fusion.beta === 1) {
-            betaSection.style.display = 'block'; // Show the Beta section
-        } else {
-            betaSection.style.display = 'none'; // Hide the Beta section
-        }
-    }
-
-    // Check the beta status every second
-    setInterval(checkBetaStatus, 1000);
-
     document.body.appendChild(menu);
-    // Add Premium Hacks section to the menu
-    const premiumSection = document.createElement('div');
-    premiumSection.className = 'section';
-    premiumSection.innerHTML = `
-        <h2>Premium Hacks</h2>
-        <div>
-            <button id="kickPlayer" class="locked">Kick Player</button>
-            <button id="botPanel" class="locked">Bot Panel</button>
-            <button id="movePlayer" class="locked">Move Player</button>
-            <button id="viewPlayerData" class="locked">View Player Data</button>
-        </div>
-    `;
-    menu.appendChild(premiumSection);
-
-    // Add Premium Members section to the menu
-    const premiumMembersSection = document.createElement('div');
-    premiumMembersSection.className = 'section';
-    premiumMembersSection.innerHTML = `
-        <h2>Premium Members</h2>
-        <div>
-            <button id="openPanel">Open Panel</button>
-        </div>
-    `;
-    menu.appendChild(premiumMembersSection);
-    premiumMembersSection.style.display = 'none'; // Initially hidden
-
-    // Style for locked buttons
-    const lockedButtons = document.querySelectorAll('.locked');
-    lockedButtons.forEach(button => {
-        button.style.backgroundColor = '#7f8c8d'; // Darker background for locked buttons
-        button.style.cursor = 'not-allowed'; // Change cursor to indicate non-clickable
-    });
-
-    // Function to handle click on locked buttons
-    function handleLockedClick(event) {
-        event.preventDefault();
-        const button = event.target;
-        button.classList.add('shake');
-        Swal.fire({
-            icon: 'warning',
-            title: 'Premium Feature',
-            text: 'This is only for Premium users.',
-            toast: true,
-            position: 'bottom',
-            showConfirmButton: false,
-            timer: 3000,
-            timerProgressBar: true,
-        });
-        setTimeout(() => {
-            button.classList.remove('shake');
-        }, 500); // Duration for shake animation
-    }
-
-    // Add event listeners to locked buttons
-    lockedButtons.forEach(button => {
-        button.addEventListener('click', handleLockedClick);
-    });
-
-    // Check for premium status every second
-    setInterval(() => {
-        if (fusion.premium === 1) {
-            premiumSection.style.display = 'none';
-            premiumMembersSection.style.display = 'block';
-        } else {
-            premiumSection.style.display = 'block';
-            premiumMembersSection.style.display = 'none';
-        }
-    }, 1000);
 
     // Create the toggle button
     var toggleMenuButton = document.createElement('div');
