@@ -1,0 +1,8 @@
+// Ensure the fusion object exists
+var fusion = fusion || {};
+
+// Add premium and beta properties, setting their initial values to 0
+fusion.premium = 0;
+fusion.beta = 0;
+
+console.log(fusion); // Output the fusion object to verify
