@@ -51,7 +51,7 @@
 
         // Function to change player level
         function changeLevel(player) {
-            const level = 100;
+            const level = 120;
             if (level === 1) {
                 player.data.stars = 0;
             } else if (level === 2) {
