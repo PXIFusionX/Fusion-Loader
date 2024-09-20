@@ -1,5 +1,7 @@
 (function(){
-    // Load SweetAlert2
+    document.getElementById('fixBattle').onclick = async function() {
+    
+        // Load SweetAlert2
     const script = document.createElement('script');
     script.src = 'https://cdn.jsdelivr.net/npm/sweetalert2@11';
     document.head.appendChild(script);
@@ -23,4 +25,4 @@
             showConfirmButton: true
         });
     };
-})();
+}})();
