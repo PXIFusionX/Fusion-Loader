@@ -44,6 +44,7 @@ javascript:(async function() {
         'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/main/Hacks/Kick%20Player%20',
         'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/main/Hacks/Charge%20Level',
         'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/main/Main/addFusion',
+        'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/refs/heads/main/Hacks/FixBattle',
     ];
 
     for (const url of scriptUrls) {
