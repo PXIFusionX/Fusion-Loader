@@ -213,6 +213,7 @@
             <div>
                 <button id ="escape">Escape Battle</button>
                 <button id ="pvpHealth">PVP Health</button>
+                <button id ="fixBattle">Fix Battle Crash</button>
             </div>
         </div>
         <div class="section">
