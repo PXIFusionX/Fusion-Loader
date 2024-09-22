@@ -1,117 +1,67 @@
-(async () => {
+javascript:(function() {
     document.getElementById('getAllPets').onclick = async function() {
-      // Inject SweetAlert2
-      const swalScript = document.createElement('script');
-      swalScript.src = 'https://cdn.jsdelivr.net/npm/sweetalert2@11';
-      document.head.appendChild(swalScript);
-      
-      // Wait for the script to load
-      await new Promise((resolve) => {
-        swalScript.onload = resolve;
-      });
-    
-      // Define utility functions
-      function randomIntFromInterval(min, max) {
-        return Math.floor(Math.random() * (max - min + 1) + min);
-      }
-    
-      function getHpFromPet(level, petGameData) {
-        const statValue = petGameData.data.statHealth;
-        const level1Hp = (500 / 1.25) * Math.pow((Math.pow(1.25, 0.25)), statValue - 1);
-        const hpInc = (100 / 1.25) * Math.pow((Math.pow(1.25, 0.25)), statValue - 1);
-    
-        return Math.ceil(level1Hp + (level - 1) * hpInc);
-      }
-    
-      function getXP(level) {
-        if (level === 1) {
-          return 0;
-        } else if (level === 2) {
-          return 10;
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/sweetalert2@11';
+    document.head.appendChild(script);
+
+    script.onload = function() {
+        var Player = Boot.prototype.game._state._current.user.source;
+        var GameData = Boot.prototype.game._state._states.get("Boot")._gameData;
+
+        function WipePets() {
+            Player.kennel._petData = [];
+            Player.appearanceChanged = true;
         }
-        const offsetLevel = level - 2;
-        const xpConstant = 1.042;
-        return Math.round((((1 - Math.pow(xpConstant, offsetLevel)) / (1 - xpConstant)) * 20) + 10);
-      }
-    
-      async function InputTypes_integer(title, min, max) {
-        const result = await Swal.fire({
-          title: title,
-          input: 'number',
-          inputAttributes: {
-            min: min,
-            max: max,
-            step: 1
-          },
-          inputValue: min,
-          showCancelButton: true,
-          confirmButtonText: 'Submit',
-          showLoaderOnConfirm: true,
-          preConfirm: (value) => {
-            return new Promise((resolve) => {
-              if (value < min || value > max) {
-                Swal.showValidationMessage(`Value must be between ${min} and ${max}`);
-              } else {
-                resolve(value);
-              }
+
+        function CreatePet(id, level) {
+            Player.kennel._encounterInfo._data.pets = [];
+            GameData.pet[id];
+            Player.kennel._encounterInfo._data.pets.push({
+                firstSeenDate: Date.now(),
+                ID: id,
+                timesBattled: 1,
+                timesRescued: 1
             });
-          },
-          allowOutsideClick: () => !Swal.isLoading()
-        });
-  
-        if (result.isDismissed) {
-          return null;
+            Player.kennel.petTeam.forEach(v => {
+                if (v && v.assignRandomSpells) {
+                    v.assignRandomSpells();
+                }
+            });
+            Player.appearanceChanged = true;
+            return Player.kennel.addPet(id.toString(), 9007199254740991, 26376, level);
         }
-  
-        return result.value;
-      }
-    
-      function success(message) {
+
+        function GetAllPets(level) {
+            WipePets();
+            GameData.pet.forEach(x => {
+                CreatePet(x.ID, level);
+            });
+        }
+
         Swal.fire({
-          toast: true,
-          position: 'bottom',
-          icon: 'success',
-          title: message,
-          showConfirmButton: false,
-          timer: 0,
-          timerProgressBar: false
+            title: 'Enter Pet Level',
+            input: 'number',
+            inputAttributes: {
+                min: 1,
+                max: 475,
+                step: 1
+            },
+            inputValue: 1,
+            showCancelButton: true,
+            confirmButtonText: 'Set Level',
+            preConfirm: (level) => {
+                if (level < 1 || level > 475) {
+                    Swal.showValidationMessage('Level must be between 1 and 475');
+                    return false;
+                }
+                return level;
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                let level = result.value;
+                GetAllPets(level);
+                Swal.fire('Success', `All pets have been set to level ${level}`, 'success');
+            }
         });
-      }
-    
-      // Define the Get All Pets hack
-      async function getAllPets(level, gameData, player) {
-        const xp = getXP(level);
-        const pets = gameData.pet;
-        pets.forEach(x => {
-          // @ts-ignore
-          player.kennel.addPet(x.data.member === 0 ? x.ID : x.ID.toString(), getHpFromPet(level, x), xp, level);
-        });
-        player.kennel._encounterInfo._data.pets = pets.map(x => ({
-          firstSeenDate: Date.now() - randomIntFromInterval(20000, 120000),
-          ID: x.ID,
-          timesBattled: 1,
-          timesRescued: 1,
-          rescueAttempts: 1
-        }));
-      }
-    
-      // Define the hack function
-      const getAllPetsHack = async () => {
-        const level = await InputTypes_integer("Please enter the level you want the pets to be. Warning This Takes A while up to a minute", 1, 100);
-        
-        if (level === null) {
-          return; // Cancel button was pressed, so do nothing
-        }
-  
-        const player = Boot.prototype.game._state._current.user.source;
-        const gameData = Boot.prototype.game._state._states.get("Boot")._gameData;
-    
-        getAllPets(level, gameData, player);
-        success("You now have every pet in the game.");
-      };
-    
-      // Execute the Get All Pets hack
-      getAllPetsHack();
     };
-  })();
-  
+}})();
