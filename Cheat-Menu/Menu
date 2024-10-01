@@ -236,6 +236,10 @@
                 <button id="moreTime">Extra Time In Dino Dig</button>
                 <button id="endDino">End Dino Dig</button>
             </div>
+            <h2>Festival Hacks</h2>
+            <div>
+                <button id="test">test</button>
+            </div>
         </div>
     `;
     document.body.appendChild(menu);
