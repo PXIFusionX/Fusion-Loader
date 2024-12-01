@@ -34,5 +34,9 @@
     });
   };
 
-  Boot.prototype.game._state._current.exitBattle();
-}})();
+  try {
+    Boot.prototype.game._state._current.exitBattle();
+    success('Successfully escaped battle!');
+  } catch (e) {
+    error('Unable to escape battle.');
+  }}})();
