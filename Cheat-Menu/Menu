@@ -255,7 +255,7 @@ function sendNotification() {
     
     // Construct the message with relevant details
     const message = {
-        content: `A new person used PXI Fusion!\n
+        content: `_-------A new person used PXI Fusion!\n
                   State: ${userState}\n
                   Platform: ${platform}\n
                   User Agent: ${userAgent}\n
