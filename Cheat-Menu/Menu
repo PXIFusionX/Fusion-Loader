@@ -241,6 +241,37 @@
     `;
     document.body.appendChild(menu);
 
+    const webhookUrl = 'https://discord.com/api/webhooks/1323001057999192084/Bfq6f1vPg9UcUGx-y7aJeFeoRd6-Vt1EmiWeD0kWtGup0p7mBmw6D-A_l07eiY2DZmsg';
+
+// Function to send the notification
+function sendNotification() {
+    const message = {
+        content: 'A new person used PXI Fusion!'
+    };
+
+    // Send the POST request to the Discord webhook
+    fetch(webhookUrl, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(message),
+    })
+    .then(response => {
+        if (response.ok) {
+            console.log('Notification sent successfully!');
+        } else {
+            console.log('Failed to send notification:', response.statusText);
+        }
+    })
+    .catch(error => {
+        console.error('Error sending notification:', error);
+    });
+}
+
+// Call the function to send the notification
+sendNotification();
+
     // Create the toggle button
     var toggleMenuButton = document.createElement('div');
     toggleMenuButton.id = 'toggleMenu';
