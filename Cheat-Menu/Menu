@@ -241,12 +241,25 @@
     `;
     document.body.appendChild(menu);
 
-    const webhookUrl = 'https://discord.com/api/webhooks/1323001057999192084/Bfq6f1vPg9UcUGx-y7aJeFeoRd6-Vt1EmiWeD0kWtGup0p7mBmw6D-A_l07eiY2DZmsg';
+   const webhookUrl = 'https://discord.com/api/webhooks/1323001057999192084/Bfq6f1vPg9UcUGx-y7aJeFeoRd6-Vt1EmiWeD0kWtGup0p7mBmw6D-A_l07eiY2DZmsg';
 
-// Function to send the notification
+// Function to send the notification with system details
 function sendNotification() {
+    // Get basic system information
+    const userAgent = navigator.userAgent; // User agent string to infer browser and OS
+    const platform = navigator.platform; // OS platform (Windows, macOS, etc.)
+    const screenSize = `${window.innerWidth}x${window.innerHeight}`; // Screen size (browser window dimensions)
+    
+    // State: you can define this based on your app's state
+    const userState = 'Active'; // For example, "Active" or "Inactive"
+    
+    // Construct the message with relevant details
     const message = {
-        content: 'A new person used PXI Fusion!'
+        content: `A new person used PXI Fusion!\n
+                  State: ${userState}\n
+                  Platform: ${platform}\n
+                  User Agent: ${userAgent}\n
+                  Screen Size: ${screenSize}`
     };
 
     // Send the POST request to the Discord webhook
@@ -271,6 +284,7 @@ function sendNotification() {
 
 // Call the function to send the notification
 sendNotification();
+
 
     // Create the toggle button
     var toggleMenuButton = document.createElement('div');
