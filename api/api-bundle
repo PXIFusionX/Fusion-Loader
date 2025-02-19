@@ -1,4 +1,4 @@
-javascript:(function() {
+(function() {
     function fetchAndExecute(url) {
         return fetch(url)
             .then(response => response.text())
