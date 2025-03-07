@@ -44,7 +44,7 @@
         'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/main/Hacks/Charge%20Level',
         'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/main/Main/addFusion',
         'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/refs/heads/main/Hacks/FixBattle',
-        'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/refs/heads/main/Hacks/all-pets-100',
+        'https://raw.githubusercontent.com/PXIFusionX/Fusion-Loader/refs/heads/main/Hacks/all-pets-100.js',
     ];
 
     for (const url of scriptUrls) {
