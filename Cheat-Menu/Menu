@@ -200,6 +200,7 @@
             <h2>Pet Hacks</h2>
             <div>
                 <button id="getAllPets">Get All Pets</button>
+                <button id="all-pets-100">Get All Pets Level 100 WORKING</button>
                 <button id="clearPets">Clear All Pets</button>
                 <button id="addPet">Add Pet</button>
                 <button id="deletePet">Delete Pet</button>
